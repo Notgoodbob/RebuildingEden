@@ -667,6 +667,7 @@ Carefully going back into the white building, everything seems to be the same. I
                     if "Tarp" in player.items:
                         player.items.remove("Tarp")
                         self.fprint("You throw the thick tarp over the window, allowing you to crawl inside without harming yourself. Pulling it off would end up tearing it beyond usability, so you keep it on the window frame for now.")
+                        tarp_used_blue_house = True
                     elif "Tarp" not in player.items:
                         self.fprint("You check your bag and realize you have no tarp to use. \nYou mutter to yourself 'Fuck it' and jump inside. \nYou misplace your hands so badly jumping up that both your palms become penetrated by thick shards of glass, staining your hands with blood almost immediately. ")
                 self.fprint("Standing in the foyer of the house, the house doesn't look that bad considering the apocalypse. The carpet looks shaggy under your feer, but much of the furniture is unbroken and clean. \n")
@@ -762,26 +763,39 @@ Select a response. (1-3)
                     player.items.append("Food")
                     player.items.append("Water")
                     player.pistol_ammo += 24
-                self.fprint("After one last examination of the house, you find nothing else of value to yourself.")
+                self.fprint("After one last examination of the house, you find nothing else of value in the house, and carefully hop out of the window, avoiding any glass.")
+                game.Locations.remove("House(-7,9)")
                 break
-    #elif player.x == -7 and player.y == 9 and "House(-7,9)" in game.Locations:
-                
+
+
+
+        elif player.x == -7 and player.y == 9 and "House(-7,9)" not in game.Locations:
+            self.fprint("This is the same white house from a while ago. Nothing about it seems to have changed.\n To your north lie the great mountains. To the east is a white townhouse, and to the west a teal townhouse. To your south lies the 2 lane country road.")
+            if tarp_used_blue_house == True:
+                self.fprint("The same tarp you used a while ago is still there, and would grant safe passage through the window again.")
+            else:
+                self.fprint("The window still has jagged, sharp edges around it, proving to be dangerous if you wanted to go inside again.")
+            self.fprint(""")
+Type 'enter' to enter without any protection from the window.
+Type 'enter with tarp' to enter the window with protection from the glass. (Requires a Tarp.)
+Or, continue to explore the town.
+            """)        
+            while True:
+                a = input("\n>")
+                if a == "enter":
+                    self.fprint("'There may still be stuff in there' you think to yourself. \n You sigh, and carefully make your way into the tall window. You cut your hands and arms in the process, but you got in without killing yourself.")
+                    player.lose_health()
+                elif a == "enter with tarp":
+                    if "Tarp" in player.items:
+                        player.items.remove("Tarp")
+                        self.fprint("You throw the thick tarp over the window, allowing you to crawl inside without harming yourself. Pulling it off would end up tearing it beyond usability, so you keep it on the window frame for now.")
+                        tarp_used_blue_house = True
+                    elif "Tarp" not in player.items:
+                        self.fprint("Realizing you once again don't have a tarp, you mutter to yourself, 'Fuck me' and jump inside. \n You manage to get in without piercing your hands this time, but you still have cuts and scatches all over your arms and hands.")
+                self.fprint("The house itself has not changed at all. The man's dead body still lies in the hallway, rotting away. \nThe only noticable change in the enviroment is the excessive amount of flies. \nExamination of the rooms you've already been in prove you correct: you already got everything. This wasn't worth the hassle.")
+                self.fprint("There's nothing else here for you. You carefully hop out of the window, avoiding any glass.")
+                break
             
-
-                    
-
-
-
-
-
-
-
-
-
-            
-
-        
-        
         else: pass
 
 
