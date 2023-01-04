@@ -562,9 +562,13 @@ class Game:
 
 
     def check_event(self):
+        ## global (well, function vars but who cares) variables
+        tarp_used_blue_house = False
         if player.x == -8 and player.y == 9 and "House(-8,9)" in self.Locations:
             #LOCATION ID: House(-8,9)
             time.sleep(3)
+            ## rando variables needed
+
             self.fprint("""
             
             
@@ -606,7 +610,7 @@ There is no furniture, only scrap wood and metal is scattered across the floor."
                         time.sleep(5)
                         self.indoorZombie()
                 self.fprint("After one last look, you realize you've picked this place clean.")
-                self.Locations.remove("House(-9,9)")
+                self.Locations.remove("House(-8,9)")
                 break      
         elif player.x == -8 and player.y == 9 and "House(-8,9)" not in self.Locations:
             self.fprint("This is the same one-story house with boarded up windows. The dried blood seems to be older still. \nType enter to enter, or continue on through the town.")
@@ -645,43 +649,56 @@ Carefully going back into the white building, everything seems to be the same. I
         elif player.x == -7 and player.y == 9 and "House(-7,9)" in game.Locations:
             ## LOCATION ID: HOUSE(-7,9)
             time.sleep(3)
-            self.fprint("""
             
-            You stand on the grass in front of a blue, one story house.
-            To your north lie the great mountains. To the east is a white townhouse, and to the west a teal townhouse. To your south lies the 2 lane country road.
-            The blue house is...off...somehow. Its foundations on the east side seem to be sinking a bit, and the one large window on the right side of the front of the house has been completely shattered. 
-            The door on the left has been completely barricaded, and upon inspection, you are unable to open it. The only way inside would be through the window.
-            Upon inspection of the window frame, it is at head height, requiring you to lift yourself within, posing a severe danger to yourself as the jagged and sharp edges of the glass would surely cut your hands and legs.
-            A tarp thick enough would protect you from the glass, at least for a second.
+            
+            self.fprint("You stand on the grass in front of a blue, one story house.")
+            time.sleep(3)
+            self.fprint("To your north lie the great mountains. To the east is a white townhouse, and to the west a teal townhouse. To your south lies the 2 lane country road.")
+            time.sleep(5)
+            self.fprint(" The blue house is...off...somehow. Its foundations on the east side seem to be sinking a bit, and the one large window on the right side of the front of the house has been completely shattered.")
+            time.sleep(5)
+            self.fprint("The door on the left has been completely barricaded, and upon inspection, you are unable to open it. The only way inside would be through the window.")
+            time.sleep(5)
+            self.fprint(" Upon inspection of the window frame, it is at head height, requiring you to lift yourself within, posing a severe danger to yourself as the jagged and sharp edges of the glass would surely cut your hands and legs.")
+            time.sleep(5)
+            self.fprint("A tarp thick enough would protect you from the glass, at least for a second.")
+            time.sleep(4)
 
-            Type 'enter' to enter without any protection from the window.
-            Type 'enter with tarp' to enter the window with protection from the glass. (Requires a Tarp.)
-            Or, continue to explore the town.
+            self.fprint("""
+Type 'enter' to enter without any protection from the window.
+Type 'enter with tarp' to enter the window with protection from the glass. (Requires a Tarp.)
+Or, continue to explore the town.
             """)        
             while True:
                 a = input("\n>")
                 if a == "enter":
                     self.fprint("You mutter to yourself 'Fuck it' and jump inside. You misplace your hands so badly jumping up that both your palms become penetrated by thick shards of glass, staining your hands with blood almost immediately.")
+                    time.sleep(5)
                     player.lose_health()
                 elif a == "enter with tarp":
                     if "Tarp" in player.items:
                         player.items.remove("Tarp")
                         self.fprint("You throw the thick tarp over the window, allowing you to crawl inside without harming yourself. Pulling it off would end up tearing it beyond usability, so you keep it on the window frame for now.")
+                        time.sleep(5)
                         tarp_used_blue_house = True
                     elif "Tarp" not in player.items:
                         self.fprint("You check your bag and realize you have no tarp to use. \nYou mutter to yourself 'Fuck it' and jump inside. \nYou misplace your hands so badly jumping up that both your palms become penetrated by thick shards of glass, staining your hands with blood almost immediately. ")
-                self.fprint("Standing in the foyer of the house, the house doesn't look that bad considering the apocalypse. The carpet looks shaggy under your feer, but much of the furniture is unbroken and clean. \n")
-                time.sleep(1.5)
+                        time.sleep(5)
+                    else:
+                        self.fprint("That is an invalid command! Type 'help' to get a list of commands.")               
+                self.fprint("Standing in the foyer of the house, the house doesn't look that bad considering the apocalypse. The carpet looks shaggy under your feet, but much of the furniture is unbroken and clean. \n")
+                time.sleep(8)
                 self.fprint("Wait. It's clean.")
+                time.sleep(4)
                 self.fprint("You begin to notice other things - an opened can of beans on a side table, a water spill on the carpet right next to the couch. Someone has been here.")
-                time.sleep(1.5)
+                time.sleep(8)
                 self.fprint("You hear the sound of a door creaking open, down the hallway to your left. You quietly slip next to the wall right next to the hallway, hiding yourself. ")
-                time.sleep(1.5)
+                time.sleep(8)
                 self.fprint("You can hear the slow walking of someone with heavy boots, carefully surveying the hallway, and making their way ever so close to you.")
-                time.sleep(1)
+                time.sleep(6)
                 self.fprint("You hear a voice.")
-                self.slow_print(f"{Fore.RED}Unknown Voice:{Style.RESET_ALL} Who's there?")
-                time.sleep(.5)
+                self.slow_print(f"\n{Fore.RED}Unknown Voice:{Style.RESET_ALL} Who's there?")
+                time.sleep(3)
                 self.fprint("""
 Select a response. (1-3)
 
@@ -695,12 +712,13 @@ Select a response. (1-3)
                 a = input("\n")
                 if a == "1":
                     self.fprint("You don't say anything. As you listen, you can hear the sound of the boots getting closer and closer. \n What do you do?")
-                    time.sleep(1)
+                    time.sleep(3)
                     self.fprint("\n1) Stay hidden, and hope for the best.\n2) Jump out from the wall and start shooting!")
                     a = input ("\n>")
                     if a == "1":                ## for sit 1
                         self.fprint("Decided to remain stealthy, you wait for the mysterious stranger to make their move first. \n As the person slowly comes out of the hallway, he turns directly into you, and his face of momentary confusion turns to rage. \n The man charges at you, and hits you on the head with his pistol, causing you to stagger away, losing health. ")
                         player.lose_health
+                        time.sleep(5)
                         self.fprint("Now a few feet from eachother, he yells at you in apparent blind rage and begins raising his pistol to fire.")
                         randomItem = random.randint(1,3)
                         if randomItem == 1:
@@ -709,8 +727,10 @@ Select a response. (1-3)
                             randomItem = "Rope"
                         if randomItem == 3:
                             randomItem = "Axe"
-                        player.fight("unknown man", 100, random.randint(15,25), randomItem, True, "he")
+                        player.fight("Unknown Man", 100, random.randint(15,25), randomItem, True, "He")
+                        time.sleep(4)
                         self.fprint("After a bloody battle, you managed to kill the man. After inspecting his body, you go to his room and find dozens of bullets - enough to last you a while. There's also some food and water in a cupboard.")
+                        time.sleep(4)
                         player.items.append("Food")
                         player.items.append("Water")
                         player.pistol_ammo += 24
@@ -719,47 +739,56 @@ Select a response. (1-3)
                         randomItem = random.randint(1,3)
                         if randomItem == 1:
                             randomItem = "Cloth"
-                        if randomItem == 2:
+                        elif randomItem == 2:
                             randomItem = "Rope"
-                        if randomItem == 3:
+                        elif randomItem == 3:
                             randomItem = "Axe"
-                        player.fight("unknown man", 100, random.randint(15,25), randomItem, True, "he")
+                        player.fight("Unknown Man", 100, random.randint(15,25), randomItem, True, "He")
                         self.fprint("After your suprise attack, and with some wounds, you check the rest of the house. In the room he came from, you find a couple dozen bullets and some food and water.")
                         player.items.append("Food")
                         player.items.append("Water")
                         player.pistol_ammo += 24
+                    else:
+                        self.fprint("That is an invalid command! Type 'help' to see a list of commands.")
                 
                 
                 
                 
                 elif a == "2":
-                    self.slow_print(f"{Fore.GREEN}You:{Style.RESET_ALL} A friend!")
-                    self.slow_print(f"{Fore.RED}Unknown Voice:{Style.RESET_ALL} I don't have any friends! They're all dead, dumbass!")
-                    self.slow_print(f"{Fore.GREEN}You:{Style.RESET_ALL} Do you think we could work something out? We've come this far, do you really want to end it all now?")
-                    self.slow_print(f"{Fore.RED}Unknown Voice:{Style.RESET_ALL} You come into MY house, lie straight to my face, try to negotiate YOUR life, and expect me to be merciful? You got another thing coming, buddy!")
-                    self.slow_print(f"{Fore.GREEN}You:{Style.RESET_ALL} All right! Hard way then.")
-                    self.fprint("You take out your trusty firearm and step into the open hallway, and train your weapon upon a man, clad in black clothing, holding a pistol in your direction.")
-                    player.fight("unknown man", 100, random.randint(15,25), randomItem, True, "he")
+                    self.slow_print(f"{Fore.GREEN}You:{Style.RESET_ALL} A friend! \n")
+                    self.slow_print(f"{Fore.RED}Unknown Voice:{Style.RESET_ALL} I don't have any friends! They're all dead, dumbass!\n")
+                    self.slow_print(f"{Fore.GREEN}You:{Style.RESET_ALL} Do you think we could work something out? We've come this far, do you really want to end it all now?\n")
+                    self.slow_print(f"{Fore.RED}Unknown Voice:{Style.RESET_ALL} You come into MY house, lie straight to my face, try to negotiate YOUR life, and expect me to be merciful? You got another thing coming, buddy!\n")
+                    self.slow_print(f"{Fore.GREEN}You:{Style.RESET_ALL} All right! Hard way then.\n")
+                    self.fprint("You take out your trusty firearm and step into the open hallway, and train your weapon upon a man, clad in black clothing, holding a pistol in your direction.\n")
+                    randomItem = random.randint(1,3)
+                    if randomItem == 1:
+                            randomItem = "Cloth"
+                    elif randomItem == 2:
+                            randomItem = "Rope"
+                    elif randomItem == 3:
+                            randomItem = "Axe"
+                    player.fight("Unknown Man", 100, random.randint(15,25), randomItem, True, "He")
                     self.fprint("After a bloody battle, you managed to kill the man. After inspecting his body, you go to his room and find dozens of bullets - enough to last you a while. There's also some food and water in a cupboard.")
                     player.items.append("Food")
                     player.items.append("Water")
                     player.pistol_ammo += 24
                 elif a == "3": 
-                    self.slow_print(f"{Fore.GREEN}You:{Style.RESET_ALL} Someone you don't want to mess with, so back up!")
-                    self.slow_print(f"{Fore.RED}Unknown Voice:{Style.RESET_ALL} No, you back up you motherfucker! Get out of my goddamn house!")
-                    self.slow_print(f"{Fore.GREEN}You:{Style.RESET_ALL} There's no property in this world, man. Take my advice, get out of here with your life.")
-                    self.slow_print(f"{Fore.RED}Unknown Voice:{Style.RESET_ALL} Fuck you!")
-                    self.slow_print(f"{Fore.GREEN}You:{Style.RESET_ALL} You've made your choice!")
+                    self.slow_print(f"{Fore.GREEN}You:{Style.RESET_ALL} Someone you don't want to mess with, so back up!\n")
+                    self.slow_print(f"{Fore.RED}Unknown Voice:{Style.RESET_ALL} No, you back up you motherfucker! Get out of my goddamn house!\n")
+                    self.slow_print(f"{Fore.GREEN}You:{Style.RESET_ALL} There's no property in this world, man. Take my advice, get out of here with your life.\n")
+                    self.slow_print(f"{Fore.RED}Unknown Voice:{Style.RESET_ALL} Fuck you!\n")
+                    self.slow_print(f"{Fore.GREEN}You:{Style.RESET_ALL} You've made your choice!\n")
                     self.fprint("You take out your trusty firearm and take a deep breath. Without another thought, you take a step out into the hallway and aim your weapon at a man, clad in black clothing, who is holding a pistol in your direction.")
                     randomItem = random.randint(1,3)
                     if randomItem == 1:
                         randomItem = "Cloth"
-                    if randomItem == 2:
+                    elif randomItem == 2:
                         randomItem = "Rope"
-                    if randomItem == 3:
+                    elif randomItem == 3:
                         randomItem = "Axe"
-                    player.fight("unknown man", 100, random.randint(15,25), randomItem, True, "he")
-                    self.fprint("After your suprise attack, and with some wounds, you check the rest of the house. In the room he came from, you find a couple dozen bullets and some food and water.")
+                    player.fight("Unknown Man", 100, random.randint(15,25), randomItem, True, "He")
+                    self.fprint("After your suprise attack, and with some wounds, you check the rest of the house. In the room he came from, you find a couple dozen bullets and some food and water.\n")
                     player.items.append("Food")
                     player.items.append("Water")
                     player.pistol_ammo += 24
@@ -771,20 +800,25 @@ Select a response. (1-3)
 
         elif player.x == -7 and player.y == 9 and "House(-7,9)" not in game.Locations:
             self.fprint("This is the same white house from a while ago. Nothing about it seems to have changed.\n To your north lie the great mountains. To the east is a white townhouse, and to the west a teal townhouse. To your south lies the 2 lane country road.")
+            time.sleep(8)
             if tarp_used_blue_house == True:
                 self.fprint("The same tarp you used a while ago is still there, and would grant safe passage through the window again.")
+                time.sleep(5)
             else:
                 self.fprint("The window still has jagged, sharp edges around it, proving to be dangerous if you wanted to go inside again.")
-            self.fprint(""")
+                time.sleep(5)
+            self.fprint("""
 Type 'enter' to enter without any protection from the window.
 Type 'enter with tarp' to enter the window with protection from the glass. (Requires a Tarp.)
 Or, continue to explore the town.
-            """)        
+            """)
+            time.sleep(2)        
             while True:
                 a = input("\n>")
                 if a == "enter":
                     self.fprint("'There may still be stuff in there' you think to yourself. \n You sigh, and carefully make your way into the tall window. You cut your hands and arms in the process, but you got in without killing yourself.")
                     player.lose_health()
+                    time.sleep(2)
                 elif a == "enter with tarp":
                     if "Tarp" in player.items:
                         player.items.remove("Tarp")
@@ -793,9 +827,10 @@ Or, continue to explore the town.
                     elif "Tarp" not in player.items:
                         self.fprint("Realizing you once again don't have a tarp, you mutter to yourself, 'Fuck me' and jump inside. \n You manage to get in without piercing your hands this time, but you still have cuts and scatches all over your arms and hands.")
                 self.fprint("The house itself has not changed at all. The man's dead body still lies in the hallway, rotting away. \nThe only noticable change in the enviroment is the excessive amount of flies. \nExamination of the rooms you've already been in prove you correct: you already got everything. This wasn't worth the hassle.")
+                time.sleep(8)
                 self.fprint("There's nothing else here for you. You carefully hop out of the window, avoiding any glass.")
                 break
-            
+
         else: pass
 
 
@@ -921,13 +956,13 @@ class Player:
     def set_camp(self):
         if "Wood" in self.items:
             self.items.remove("Wood")
-            self.items = 100
             self.lose_hunger()
             self.lose_thirst()
+            player.energy = 100
             game.day +=1
-            game.fprint("You cozy up under the stars, ready for the next day.")
+            game.fprint("You light a small fire, and sleep by its heat in the crisp Oregonian weather.")
         else:
-            game.fprint("You don't have any wood to make a shelter.")
+            game.fprint("You don't have any wood to make a camp fire.")
    ## function for eating
     def eat(self):
         if "Food" in self.items and self.hunger <100:
