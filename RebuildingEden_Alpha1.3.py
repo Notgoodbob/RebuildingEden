@@ -453,19 +453,6 @@ class Game:
         T           ------          Highway Tunnel
         Grey R      ------          Road
         Blue R      ------          River
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
                                                         """)
 
 
@@ -653,7 +640,7 @@ Carefully going back into the white building, everything seems to be the same. I
             
             self.fprint("You stand on the grass in front of a blue, one story house.")
             time.sleep(3)
-            self.fprint("To your north lie the great mountains. To the east is a white townhouse, and to the west a teal townhouse. To your south lies the 2 lane country road.")
+            self.fprint("To your north lie the great mountains. To the west is a white townhouse, and to the east a teal townhouse. To your south lies the 2 lane country road.")
             time.sleep(5)
             self.fprint(" The blue house is...off...somehow. Its foundations on the east side seem to be sinking a bit, and the one large window on the right side of the front of the house has been completely shattered.")
             time.sleep(5)
@@ -799,7 +786,7 @@ Select a response. (1-3)
 
 
         elif player.x == -7 and player.y == 9 and "House(-7,9)" not in game.Locations:
-            self.fprint("This is the same white house from a while ago. Nothing about it seems to have changed.\n To your north lie the great mountains. To the east is a white townhouse, and to the west a teal townhouse. To your south lies the 2 lane country road.")
+            self.fprint("This is the same blue house from a while ago. Nothing about it seems to have changed.\n To your north lie the great mountains. To the west is a white townhouse, and to the east a teal townhouse. To your south lies the 2 lane country road.")
             time.sleep(8)
             if tarp_used_blue_house == True:
                 self.fprint("The same tarp you used a while ago is still there, and would grant safe passage through the window again.")
@@ -824,8 +811,9 @@ Or, continue to explore the town.
                         player.items.remove("Tarp")
                         self.fprint("You throw the thick tarp over the window, allowing you to crawl inside without harming yourself. Pulling it off would end up tearing it beyond usability, so you keep it on the window frame for now.")
                         tarp_used_blue_house = True
-                    elif "Tarp" not in player.items:
+                    elif "Tarp" not in player.items:       
                         self.fprint("Realizing you once again don't have a tarp, you mutter to yourself, 'Fuck me' and jump inside. \n You manage to get in without piercing your hands this time, but you still have cuts and scatches all over your arms and hands.")
+                else: ("That is an invalid command!")
                 self.fprint("The house itself has not changed at all. The man's dead body still lies in the hallway, rotting away. \nThe only noticable change in the enviroment is the excessive amount of flies. \nExamination of the rooms you've already been in prove you correct: you already got everything. This wasn't worth the hassle.")
                 time.sleep(8)
                 self.fprint("There's nothing else here for you. You carefully hop out of the window, avoiding any glass.")
