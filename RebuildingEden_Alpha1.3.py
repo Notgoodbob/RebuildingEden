@@ -397,7 +397,7 @@ class Game:
         elif a == "help":
             self.commands()
         elif a == "quit":
-            self.menu()
+            sys.exit()
         elif a == "crafting":
             self.crafting()
         elif a == "patchnotes":
