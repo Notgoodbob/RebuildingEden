@@ -316,7 +316,15 @@ class Game:
                 - i.e. you move to (0,1), scavenge, move to (0,2), scavenge, and then move back to (0,1) and you may scavenge again. (THIS WILL BE REMOVED SOON, AS IN THE FUTURE SCAVENGING WILL BE DONE AUTOMATICALLY)
             - Fixed spelling error in opening intro
 
-        
+
+        BUG FIXES:
+            - Fixed a bug that would allow you to enter a house by going West ???
+            - Fixed self.die() function that wouldn't allow you to die
+            - Fixed enemies from becoming fucking immortal and having negative health
+            - Fixed a bug that printed the map infinitely (loop error)
+            - Fixed not being able to quit the game
+            - Fixed a bug that restarts your computer after going to the coordinate (1000,1000) ( I set up macro to see the limits of the coord system. I found it.)
+    
         
         """)
     
