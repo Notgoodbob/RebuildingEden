@@ -18,3 +18,10 @@ HOW TO PLAY:
 2) Ensure your directory is in your desktop
 3) Type "python3 {file name here}" to open the .py file.
 4) Enjoy!
+
+OR:
+
+1) Install Visual Studio Code
+2) Copy + Paste source code to a .py file
+3) Click "run" in the top right
+4) Enjoy!
