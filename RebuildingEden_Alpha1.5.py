@@ -15,7 +15,7 @@ import time
 class Game:
     def __init__(self, day):
         self.day = day
-        self.Locations = ["House(-8,9)", "House(-7,9)"]
+        self.Locations = ["House(-8,9)", "House(-7,9)", "House(-6,9)"]
     def menu(self):
         self.reset_console
         self.fprint("Rebuilding Eden")
@@ -67,8 +67,8 @@ class Game:
         self.reset_console
         game.fprint("You are dead.", 2)
         game.fprint(f"You survived for {game.day} days.", 2)
-        time.sleep(5)
-        self.reset_console
+        time.sleep(3)
+        self.reset_console()
         game.play_again()
     
     def play_again(self):
@@ -77,8 +77,9 @@ class Game:
         while True:
             a = input("\n> ")
             if a == "1":
-                self.fprint("Take you to the main menu...")
+                self.fprint("Taking you to the main menu...")
                 time.sleep(2)
+                self.reset_data()
                 self.menu()
             elif a == "2":
                 self.fprint("Okay then.")
@@ -327,8 +328,7 @@ class Game:
 
 
         ------------------------------------------------------------------------------------------------------------------------------------------------
-        Rebuilding Eden Alpha 1.5 Patch Notes Feb. 21
-
+        Rebuilding Eden Alpha 1.5 Patch Notes Mar. 6
         NEW: 
             - Created outer boundaries
             - New mountain flavor text
@@ -337,6 +337,12 @@ class Game:
             - Fixed a bug that did not allow you to choose not to enter buildings
             - Sytnax errors
             - Spelling / Grammar errors
+
+
+
+        
+        Rebuilding Eden Alpha 1.6 Patch Notes
+
 
     
 
@@ -357,6 +363,7 @@ class Game:
         global game, player
         game = Game(1)
         player = Player(0, 0, 100, 100, 100, 100, 0, 500, 20, 0, 0)
+        player.items = []
         player.items.append("Knife")
         player.items.append("Pistol")
         self.start_intro
@@ -667,7 +674,7 @@ Carefully going back into the white building, everything seems to be the same. I
                         self.indoorZombie()
                 self.fprint("You step away from the house, and onto the sidewalk.")
                 break
-        elif player.x == -7 and player.y == 9 and "House(-7,9)" in game.Locations:
+        elif player.x == -7 and player.y == 9 and "House(-7,9)" in self.Locations:
             ## LOCATION ID: HOUSE(-7,9)
             time.sleep(3)
             
@@ -731,12 +738,12 @@ Select a response. (1-3)
 """)
                 a = input("\n")
                 if a == "1":
-                    self.fprint("You don't say anything. As you listen, you can hear the sound of the boots getting closer and closer. \n What do you do?")
+                    self.fprint("You don't say anything. As you listen, you can hear the sound of the boots getting closer and closer. \nWhat do you do?")
                     time.sleep(3)
                     self.fprint("\n1) Stay hidden, and hope for the best.\n2) Jump out from the wall and start shooting!")
                     a = input ("\n>")
                     if a == "1":                ## for sit 1
-                        self.fprint("Decided to remain stealthy, you wait for the mysterious stranger to make their move first. \n As the person slowly comes out of the hallway, he turns directly into you, and his face of momentary confusion turns to rage. \n The man charges at you, and hits you on the head with his pistol, causing you to stagger away, losing health. ")
+                        self.fprint("Decided to remain stealthy, you wait for the mysterious stranger to make their move first. \nAs the person slowly comes out of the hallway, he turns directly into you, and his face of momentary confusion turns to rage. \nThe man charges at you, and hits you on the head with his pistol, causing you to stagger away, losing health. ")
                         player.lose_health
                         time.sleep(5)
                         self.fprint("Now a few feet from eachother, he yells at you in apparent blind rage and begins raising his pistol to fire.")
@@ -819,8 +826,8 @@ Select a response. (1-3)
 
 
 
-        elif player.x == -7 and player.y == 9 and "House(-7,9)" not in game.Locations:
-            self.fprint("This is the same blue house from a while ago. Nothing about it seems to have changed.\n To your north lie the great mountains. To the west is a white townhouse, and to the east a teal townhouse. To your south lies the 2 lane country road.")
+        elif player.x == -7 and player.y == 9 and "House(-7,9)" not in self.Locations:
+            self.fprint("This is the same blue house from a while ago. Nothing about it seems to have changed.\n To your north lie the great mountains. To the west is a white townhouse, and to the east a teal townhouse. To your south lies the 2 lane town road.")
             time.sleep(8)
             if tarp_used_blue_house == True:
                 self.fprint("The same tarp you used a while ago is still there, and would grant safe passage through the window again.")
@@ -837,7 +844,7 @@ Or, continue to explore the town.
             while True:
                 a = input("\n>")
                 if a == "enter":
-                    self.fprint("'There may still be stuff in there' you think to yourself. \n You sigh, and carefully make your way into the tall window. You cut your hands and arms in the process, but you got in without killing yourself.")
+                    self.fprint("'There may still be stuff in there' you think to yourself. \nYou sigh, and carefully make your way into the tall window. You cut your hands and arms in the process, but you got in without killing yourself.")
                     player.lose_health()
                     time.sleep(2)
                 elif a == "enter with tarp":
@@ -852,6 +859,39 @@ Or, continue to explore the town.
                 time.sleep(8)
                 self.fprint("There's nothing else here for you. You carefully hop out of the window, avoiding any glass.")
                 break
+        elif player.x == -6 and player.y == 9 and "House(-6,9)" in self.Locations:
+            self.fprint("You stand in front of a white townhouse, its two stories a prominent and unique characteristic among the other houses in this town. There seems to be a potent stench coming from within, immediately taking over your senses. \nIt is in rough condition, but still stands, with a sturdy grey door blocking any line of sight into the building. \n")
+            time.sleep(2)
+            self.fprint("Closer inspection reveals that the door is unlocked.")
+            self.fprint(""""
+Type 'enter' to enter through the grey door.
+Type 'investigate' to go around the backside of the house.
+Or, continue to explore the town. """)
+            time.sleep(2)
+            while True:
+                rooms = ["Room1", "Room2", "Room3"]
+                a = input("\n>")
+                if a == "enter":
+                    self.fprint("You walk up to the landing, and slowly open the door. \n")
+                    time.sleep(1)
+                    self.fprint("Your eyes are met by a long hallway, strewn with trash and assorted debris. \nThe stench you could smell from outside has become even more powerful - and the ceiling tiles above you have been darkened and soaked with a black substance, which slowly drips down in front of you.\n  ")     
+                    time.sleep(3)
+                    self.fprint("The hallway has 3 openings: one to your direct left, which leads into an adjacent room. \nThe second is in the middle of the hallway on your right, which would seemingly enter into another room. \nThe third is on the complete other end of the hallway, which seems to be the stairs to go up to the second story.")
+                    time.sleep(5)
+                    self.fprint("Where do you go?")
+                    self.fprint(""" 
+Type '1' to enter the first opening.
+Type '2' to enter the second opening.
+Type '3' to enter the third opening.   """)
+                    while True:
+                        a = input("\n>")
+                        if a == 1:
+                            rooms.remove("Room1")
+                            self.fprint("")
+
+
+            
+            
         ## death barriers
         #############################################
         elif -10 <= player.x <= 10 and player.y == -10:
@@ -1230,6 +1270,7 @@ class Player:
 
 game = Game(1)
 player = Player(0, 0, 100, 100, 100, 100, 0, 500, 20, 0, 0)
+##player.items.remove all
 player.items.append("Knife")
 player.items.append("Pistol")
 game.menu()
