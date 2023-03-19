@@ -3,7 +3,6 @@ Rebuilding Eden is a terminal-only text-based survival game made in Python. It t
 
 <s> NOTE: I have paused production on this Text-based version of Rebuilding Eden. I have begun the process of converting this game into a Unity 3D game world, as I believe it to be the best way to exercise my programming abilities. Updates may still come for this version of Rebuilding Eden, but expect no new additions for a while. </s>
 
-After realizing I should stick to one project at a time and finish it, I have begun production on Rebuilding Eden again. Expect updates weekly / periodically.
 Rebuilding Eden is a passion project by me. It is inspired by multiple already-existing games like it, and I've spent a good amount of time on it.
 
 This is currently not an executable, and will remain that way until the game is finished. This is just an 
