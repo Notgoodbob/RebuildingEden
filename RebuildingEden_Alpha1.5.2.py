@@ -19,7 +19,7 @@ class Game:
     def menu(self):
         self.reset_console
         self.fprint("Rebuilding Eden")
-        print("Alpha Release 1.2")
+        print("Alpha Release 1.5.2")
         print("~By Jackson Hermsmeyer ~")
         print("Type 'play'.")
 
