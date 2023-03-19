@@ -138,7 +138,7 @@ class Game:
             self.fprint("""     
             
                     Rebuilding Eden
-        Alpha 1.2 Release - By Jackson Hermsmeyer
+        Alpha 1.5.2 Release - By Jackson Hermsmeyer
                      Type 'play'.
             
             
