@@ -121,9 +121,10 @@ class Game:
     def crafting(self):
         print("""This is a list of all craftable items in the game.
         
-        Bandage         ----    1 Cloth     ----    'craft bandage'
-        2 Cloth         ----    1 Tarp      ----    'craft cloth'
-       
+        Camp            ----    100 Wood + 5 Tarp        ----    'set camp'
+        Bandage         ----    1 Cloth                  ----    'craft bandage'
+        2 Cloth         ----    1 Tarp                   ----    'craft cloth'
+
         
         
         
@@ -300,6 +301,7 @@ class Game:
                 - You can only scavenge in a location once / move
                 - i.e. you move to (0,1), scavenge, move to (0,2), scavenge, and then move back to (0,1) and you may scavenge again. (THIS WILL BE REMOVED SOON, AS IN THE FUTURE SCAVENGING WILL BE DONE AUTOMATICALLY)
             - Fixed spelling error in opening intro
+
         BUG FIXES:
             - Fixed a bug that would allow you to enter a house by going West ???
             - Fixed self.die() function that wouldn't allow you to die
@@ -344,6 +346,22 @@ class Game:
         Rebuilding Eden Alpha 1.6 Patch Notes
 
 
+        NEW: 
+            - You may now actually restart the game!
+            - Dynamic Map System
+                - Able to see current location directly on the map
+                - Updated grid lines to make the map smoother
+            - Added 1 new location in the north west corner (Up to 3 now!)
+            - Added debug biome descriptions for grasslands + river
+        BUG FIXES:
+            - Fixed a few function call errors
+        
+        CHANGES:
+            - A few spelling mistakes
+            
+
+
+
     
 
          
@@ -362,7 +380,7 @@ class Game:
     def reset_data(self):
         global game, player
         game = Game(1)
-        player = Player(0, 0, 100, 100, 100, 100, 0, 500, 20, 0, 0)
+        player = Player(0, 0, 100, 100, 100, 100, 0, 500, 20, 0, 0, "Null")
         player.items = []
         player.items.append("Knife")
         player.items.append("Pistol")
@@ -378,8 +396,18 @@ class Game:
         print("Pistol Ammo: ", player.pistol_ammo)
         print("Shotgun Ammo: ", player.shotgun_ammo)
         print("Rifle Ammo: ", player.rifle_ammo)
-        for things in player.items:
-            print(things)
+        item_count = {}
+        for item in player.items:
+            if item in item_count:
+                item_count[item] += 1
+            else:
+                item_count[item] = 1
+
+    # Print items with their count
+        for item, count in item_count.items():
+            print(f"{item} x{count}")
+       
+       
 
 ### shows current location
     def print_location(self):
@@ -400,6 +428,15 @@ class Game:
         player.lose_energy()
         player.lose_hunger()
         player.lose_thirst()
+        if (player.x == -9 and player.y == 9) or (player.x == -9 and player.y == 5) or (player.x == -4 and player.y == 5) or (player.x == -8 and player.y == 0) or (player.x == -8 and player.y == -3) or (player.x == -4 and player.y == 1) or (player.x == -4 and player.y == -5) or (player.x == 5 and player.y == -2) or (player.x == 7 and player.y == -9) or (player.x == 9 and player.y == -4) or (player.x == -9 and player.y == 4) or (player.x == -8 and player.y == 4) or (player.x == -7 and player.y == 4) or (player.x == -6 and player.y == 4) or (player.x == -4 and player.y == 5) or (player.x == -5 and player.y == 4) or (player.x == -4 and player.y == 4):
+            player.biome = "Grassland"
+        elif (player.x == -9 and player.y == -3) or (player.x == -9 and player.y == -4) or (player.x == -8 and player.y == -4) or (player.x == -8 and player.y == -5) or (player.x == -8 and player.y == -6) or (player.x == -7 and player.y == -6) or (player.x == -7 and player.y == -8) or (player.x == -6 and player.y == -8) or (player.x == -5 and player.y == -8) or (player.x == -4 and player.y == -8) or (player.x == -4 and player.y == -9) or (player.x == -3 and player.y == -9) or (player.x == -2 and player.y == -9):
+            player.biome = "River"
+        
+    
+        
+        else:
+            player.biome = "Null"
 
 
 
@@ -411,7 +448,7 @@ class Game:
             player.eat()
         elif a == "drink":
             player.drink()
-        elif a == "set camp":
+        elif a == "sleep":
             player.set_camp()
         elif a == "scavenge":
             player.scavenge()
@@ -441,47 +478,75 @@ class Game:
             self.patchnotes()
         elif a == "map":
             self.print_map()
+        
+        #debugging commands
+        
+        elif a == "biome":
+            print(player.biome)
+        
         else:
             return False
         return True
     
 
-
-    
     def print_map(self):
-        world_map =  [['10', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
-                      ['9', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
-                      ['8',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
-                      ['7', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTMAGENTA_EX}S{Style.RESET_ALL} ', f' {Fore.LIGHTMAGENTA_EX}S{Style.RESET_ALL} ', f' {Fore.LIGHTMAGENTA_EX}S{Style.RESET_ALL} ', f' {Fore.LIGHTMAGENTA_EX}S{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
-                      ['6', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
-                      ['5',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}T{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
-                      ['4',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
-                      ['3',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
-                      ['2',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
-                      ['1',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
-                      ['0',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.YELLOW}C{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
-                      ['-1',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
-                      ['-2',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
-                      ['-3',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
-                      ['-4',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
-                      ['-5',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
-                      ['-6',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
-                      ['-7',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}T{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
-                      ['-8',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
-                      ['-9',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
+        world_map =  [['10 ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
+                      [' 9 ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
+                      [' 8 ',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
+                      [' 7 ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTMAGENTA_EX}S{Style.RESET_ALL} ', f' {Fore.LIGHTMAGENTA_EX}S{Style.RESET_ALL} ', f' {Fore.LIGHTMAGENTA_EX}S{Style.RESET_ALL} ', f' {Fore.LIGHTMAGENTA_EX}S{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
+                      [' 6 ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
+                      [' 5 ',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}T{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
+                      [' 4 ',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
+                      [' 3 ',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
+                      [' 2 ',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
+                      [' 1 ',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
+                      [' 0 ',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
+                      ['-1 ',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
+                      ['-2 ',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
+                      ['-3 ',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
+                      ['-4 ',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
+                      ['-5 ',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
+                      ['-6 ',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
+                      ['-7 ',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}T{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
+                      ['-8 ',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
+                      ['-9 ',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.CYAN}R{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.YELLOW}H{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTGREEN_EX}G{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.GREEN}F{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
                       ['-10',f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ', f' {Fore.LIGHTBLACK_EX}X{Style.RESET_ALL} ',],
-                      [' ', '-10','-9','-8','-7','-6','-5','-4','-3','-2','-1','0','1','2','3','4','5','6','7','8','9','10'] ] 
-        for i in world_map:
-            print('\n' + f'{Fore.LIGHTBLACK_EX}+{Style.RESET_ALL}---' * 22 + f'{Fore.LIGHTBLACK_EX}+{Style.RESET_ALL}')
-            for j in i:
-                print('|{:^3}'.format(j), end='')
-            print('|', end='')
-        print('\n' +  f'{Fore.LIGHTBLACK_EX}+{Style.RESET_ALL}---' * 22 + f'{Fore.LIGHTBLACK_EX}+{Style.RESET_ALL}')
+                      ['   ', '-10','-9 ','-8 ','-7 ','-6 ','-5 ','-4 ','-3 ','-2 ','-1 ',' 0 ',' 1 ',' 2 ',' 3 ',' 4 ',' 5 ',' 6 ',' 7 ',' 8 ',' 9 ',' 10'] ] 
+        
+    # Convert coordinates to indices for the map array
+        map_size =22
+        row = map_size - 1 - (player.y + map_size // 2)
+        col = player.x + map_size // 2
+    
+
+        world_map[row][col] = f'{Fore.RED} U {Style.RESET_ALL}'
+
+        
+        
+        map_size =22
+
+    # Print the top border
+        print("┌" + "───" * (map_size) + ("──" * 10) + "─" + "┐")
+
+    # Print the map content
+        for i, row in enumerate(world_map):
+            row_str = "│"
+            for cell in row:
+                row_str += "" + cell + "│"
+            print(row_str)
+
+        # Print horizontal lines between rows, except for the last row
+            if i < map_size - 1:
+                print("├" + "───┼" * (map_size - 1) + "───┤")
+
+    # Print the bottom border
+        print("└" + "───" * map_size + ("──" * 10) + "─" + "┘")
+        
         print("""
                  
                     MAP KEY
        
-        C           ------          Starting Camp
+        U           ------          Player Location
         F           ------          Forest
         G           ------          Prarie
         H           ------          House
@@ -490,7 +555,24 @@ class Game:
         T           ------          Highway Tunnel
         Grey R      ------          Road
         Blue R      ------          River
-                                                        """)
+                                                        """)   
+
+
+
+
+## biome type designation
+
+
+   # def biomieDesignation(self):
+       # if player.x 
+
+
+        
+  
+
+
+
+
 
 
     def indoorZombie(self):
@@ -561,21 +643,25 @@ class Game:
                 player.y += 1
                 self.update_state()
                 self.check_event()
+                
             elif a == "s":
                 self.fprint("You went south.")
                 player.y -= 1
                 self.update_state()
                 self.check_event()
+                
             elif a == "w":
                 self.fprint("You went west.")
                 player.x -= 1
                 self.update_state()
                 self.check_event()
+                
             elif a == "e":
                 self.fprint("You went east.")
                 player.x += 1
                 self.update_state()
                 self.check_event()
+                
             elif self.player_command(a):
                 pass
             else:
@@ -997,7 +1083,7 @@ Type '3' to enter the third opening.   """)
 
 class Player:
     def __init__(self, x, y, health, hunger, energy, thirst, attack, gold, pistol_ammo, shotgun_ammo,
-    rifle_ammo):
+    rifle_ammo, biome):
         self.items = []
         self.x = x
         self.y = y
@@ -1010,6 +1096,7 @@ class Player:
         self.pistol_ammo = pistol_ammo
         self.shotgun_ammo = shotgun_ammo
         self.rifle_ammo = rifle_ammo
+        self.biome = biome
    ## bandages
     def bandage(self):
         if "Bandage" in self.items and self.health < 100:
@@ -1041,7 +1128,7 @@ class Player:
 
 
   ## function for setting camp
-    def set_camp(self):
+    def sleep(self):
         if "Wood" in self.items:
             self.items.remove("Wood")
             self.lose_hunger()
@@ -1050,12 +1137,15 @@ class Player:
             game.day +=1
             game.fprint("You light a small fire, and sleep by its heat in the crisp Oregonian weather.")
         else:
-            game.fprint("You don't have any wood to make a camp fire.")
+            game.fprint("You don't have any wood to make a camp fire. Without its warmth, you dare not sleep under these stars.")
    ## function for eating
     def eat(self):
         if "Food" in self.items and self.hunger <100:
             self.items.remove("Food")
             self.hunger = 100
+            self.health += random.random(5,10)
+            if self.health > 100:
+                self.health = 100
             game.fprint("You sit down and have a quick bite to eat. Your hunger has been satiated, for now.")
         elif "Food" not in self.items:
             game.fprint("You don't have any food to eat.")
@@ -1088,6 +1178,9 @@ class Player:
         if "Water" in self.items and self.thirst < 100:
             self.items.remove("Water")
             self.thirst = 100
+            self.health += random.random(5,10)
+            if self.health > 100:
+                self.health = 100
             game.fprint("You drink some warm water, quenching your thirst.")
         elif "Water" not in self.items and self.thirst < 100:
             game.fprint("You do not have any water to drink.")
@@ -1240,6 +1333,7 @@ class Player:
             if self.health <= 0:
                 if unit == True:
                     game.fprint(f"The {enemy} kills you...", 3)
+                    game.die()                
                 else:
                     game.fprint(f"{enemy} kills you...", 3)
                     game.die()
@@ -1269,7 +1363,7 @@ class Player:
 
 
 game = Game(1)
-player = Player(0, 0, 100, 100, 100, 100, 0, 500, 20, 0, 0)
+player = Player(0, 0, 100, 100, 100, 100, 0, 500, 20, 0, 0, "Null")
 ##player.items.remove all
 player.items.append("Knife")
 player.items.append("Pistol")
