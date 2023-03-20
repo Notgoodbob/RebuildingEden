@@ -19,7 +19,7 @@ class Game:
     def menu(self):
         self.reset_console
         self.fprint("Rebuilding Eden")
-        print("Alpha Release 1.5.2")
+        print("Alpha Release 1.5.3")
         print("~By Jackson Hermsmeyer ~")
         print("Type 'play'.")
 
@@ -138,7 +138,7 @@ class Game:
             self.fprint("""     
             
                     Rebuilding Eden
-        Alpha 1.5.2 Release - By Jackson Hermsmeyer
+        Alpha 1.2 Release - By Jackson Hermsmeyer
                      Type 'play'.
             
             
@@ -178,6 +178,7 @@ class Game:
                 self.reset_console()
                 self.fprint("After reminiscing about old times, you get up, and decide to trek onward.")
                 self.main()
+               
             elif a == "2":
                 self.intro()
             else:
@@ -223,6 +224,7 @@ class Game:
         time.sleep(1)
         self.fprint("You are at your hastily-thrown together camp.")
         self.main()
+       
 #######################################
 ####################################### PATCH NOTES
 
@@ -343,7 +345,7 @@ class Game:
 
 
         
-        Rebuilding Eden Alpha 1.6 Patch Notes
+        Rebuilding Eden Alpha 1.5.3 Patch Notes
 
 
         NEW: 
@@ -353,12 +355,18 @@ class Game:
                 - Updated grid lines to make the map smoother
             - Added 1 new location in the north west corner (Up to 3 now!)
             - Added debug biome descriptions for grasslands + river
+            - Added some debug commands
+            - Items in inventory now stack 
+                - ex: Cloth x2
+            - New Biome marker system
+                - Will be used in the future to generate random events.
+            
         BUG FIXES:
             - Fixed a few function call errors
         
         CHANGES:
             - A few spelling mistakes
-            
+
 
 
 
@@ -432,11 +440,16 @@ class Game:
             player.biome = "Grassland"
         elif (player.x == -9 and player.y == -3) or (player.x == -9 and player.y == -4) or (player.x == -8 and player.y == -4) or (player.x == -8 and player.y == -5) or (player.x == -8 and player.y == -6) or (player.x == -7 and player.y == -6) or (player.x == -7 and player.y == -8) or (player.x == -6 and player.y == -8) or (player.x == -5 and player.y == -8) or (player.x == -4 and player.y == -8) or (player.x == -4 and player.y == -9) or (player.x == -3 and player.y == -9) or (player.x == -2 and player.y == -9):
             player.biome = "River"
-        
-    
-        
+        elif ( -8 <= player.x <=7 and player.y == 8) or (player.x == 4 and 7 <= player.y <= 4) or (player.x == 3 and -2 <= player.y <= -6) or ( -2 <= player.x <= 3 and player.y == -6) or (-8 <= player.x <= -2 and player.y == -7) or (player.x == 7 and 8 <= player.y <= 5) or (player.x ==8 and player.y == 5):
+            player.biome = "Road" 
+        elif (player.x == 9 and player.y == 5) or (player.x == -9 and player.y == -7):
+            player.biome = "Tunnel"
+        elif (-8 <= player.x <= -5 and player.y == 9) or (player.x == -10 and 8 <= player.y <= 6) or (-8 <= player.x <= -5 and player.y == 5) or (player.x == -5 and player.y == -2) or (player.x == 6 and player.y == -2) or (player.x == 7 and player.y == -2) or (player.x == 6 and player.y == -4) or (player.x == 5 and player.y == -9):
+            player.biome = "House"
+        elif (-10 <= player.x <= 10 and player.y == -10) or (player.x == 10 and -10 <= player.y <= 10) or (player.x == -10 and -10 <= player.y <= 10) or (-10 <= player.x <= 10 and player.y == 10):
+            player.biome = "Mountain"
         else:
-            player.biome = "Null"
+            player.biome = "Forest"
 
 
 
@@ -483,6 +496,20 @@ class Game:
         
         elif a == "biome":
             print(player.biome)
+        elif a == "items":
+            player.items.append("Cloth")
+            player.items.append("Cloth")
+            player.items.append("Cloth")
+            player.items.append("Cloth")
+            player.items.append("Cloth")
+            player.items.append("Cloth")
+            player.items.append("Cloth")
+            player.items.append("Cloth")
+            player.items.append("Cloth")
+            player.items.append("Cloth")
+            player.items.append("Cloth")
+            player.items.append("Cloth")
+
         
         else:
             return False
@@ -557,16 +584,6 @@ class Game:
         Blue R      ------          River
                                                         """)   
 
-
-
-
-## biome type designation
-
-
-   # def biomieDesignation(self):
-       # if player.x 
-
-
         
   
 
@@ -636,6 +653,7 @@ class Game:
     
    
     def main(self):
+        self.commands()
         while True:
             a = input("\n")
             if a == "n":
@@ -655,7 +673,7 @@ class Game:
                 player.x -= 1
                 self.update_state()
                 self.check_event()
-                
+        
             elif a == "e":
                 self.fprint("You went east.")
                 player.x += 1
@@ -991,7 +1009,7 @@ Type '3' to enter the third opening.   """)
             self.fprint("You decide to continue up the mountain, desiring an escape from this dangerous valley. As you head up the mountains, the cold air whips at your skin, lapping at the last of your heat. \nAs you crest over the first range, you see nothing but endless wilderness for miles. Your eyes get heavy, and the cold darkness takes you.")
             game.die()
         elif player.x == -10 and -10 <= player.y <= 10:
-            self.fprint("You stand before the mighty western mountains, looming in front of you. Its high peaks would prove a treacherous climb, and any attempts to do so would surely end in your death. Going further east would be a death sentence.")
+            self.fprint("You stand before the mighty western mountains, looming in front of you. Its high peaks would prove a treacherous climb, and any attempts to do so would surely end in your death. Going further west would be a death sentence.")
         elif player.x == -11 and -10 <= player.y <= 10:
             self.fprint("You decide to continue up the mountain, desiring an escape from this dangerous valley. As you head up the mountains, the cold air whips at your skin, lapping at the last of your heat. \nAs you crest over the first range, you see nothing but endless wilderness for miles. Your eyes get heavy, and the cold darkness takes you.")
             game.die()
@@ -1000,12 +1018,10 @@ Type '3' to enter the third opening.   """)
         elif -10 <= player.x <= 10 and player.y == 11:
             self.fprint("You decide to continue up the mountain, desiring an escape from this dangerous valley. As you head up the mountains, the cold air whips at your skin, lapping at the last of your heat. \nAs you crest over the first range, you see nothing but endless wilderness for miles. Your eyes get heavy, and the cold darkness takes you.")
             game.die()
-        ###############################################
-        
-        
-        
         else: pass
         
+        ###############################################
+     
 
 
                         
@@ -1143,7 +1159,7 @@ class Player:
         if "Food" in self.items and self.hunger <100:
             self.items.remove("Food")
             self.hunger = 100
-            self.health += random.random(5,10)
+            self.health += random.randint(5,10)
             if self.health > 100:
                 self.health = 100
             game.fprint("You sit down and have a quick bite to eat. Your hunger has been satiated, for now.")
@@ -1157,10 +1173,15 @@ class Player:
 
 ## CRAFTING CRAFTING CRAFTING CRAFTING CRAFTING CRAFTING CRAFTING CRAFTING
     def craft_bandage(self):
+        bandageFailChance = random.randint(1,10)
         if "Cloth" in self.items:
-            self.items.remove("Cloth")
-            self.items.append("Bandage")
-            game.fprint("Using some straps of cloth, you sucessfully made a bandage.")
+            if bandageFailChance == (1):
+                self.items.remove("Cloth")
+                game.fprint("As you begin rolling the cloth together, its feeble fibers break and fracture, rendering the cloth useless.")
+            else:
+                self.items.remove("Cloth")
+                self.items.append("Bandage")
+                game.fprint("Using some straps of cloth, you sucessfully made a bandage.")
         else:
              game.fprint("You do not have any cloth to make a bandage.")
     
