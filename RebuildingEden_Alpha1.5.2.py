@@ -16,25 +16,6 @@ class Game:
     def __init__(self, day):
         self.day = day
         self.Locations = ["House(-8,9)", "House(-7,9)", "House(-6,9)"]
-    def menu(self):
-        self.reset_console
-        self.fprint("Rebuilding Eden")
-        print("Alpha Release 1.5.3")
-        print("~By Jackson Hermsmeyer ~")
-        print("Type 'play'.")
-
-        while True:
-            userAction = input("\n> ")
-            if userAction == "play":
-                 self.start_intro()
-            elif userAction == "quit":
-                sys.exit
-            elif userAction == "help":
-                 self.commands()
-            elif userAction == "info":
-                self.fprint("© Jackson Hermsmeyer 2022-23")
-            else:
-                self.fprint("""Invalid command! Enter 'play' to launch the game, 'quit' to quit, 'info' for info, or 'help' for a list of commands.""")
         
 ## 4 below functions are not mine, purely for textual cosmetics
 ##slowly puts out text
@@ -83,9 +64,7 @@ class Game:
                 self.menu()
             elif a == "2":
                 self.fprint("Okay then.")
-                time.sleep(3)
-                while True:
-                    print("HAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHA") 
+                     
             else:
                 self.fprint("Invalid command!")
 
@@ -138,7 +117,7 @@ class Game:
             self.fprint("""     
             
                     Rebuilding Eden
-        Alpha 1.2 Release - By Jackson Hermsmeyer
+        Alpha 1.5.3 Release - By Jackson Hermsmeyer
                      Type 'play'.
             
             
@@ -222,7 +201,7 @@ class Game:
         time.sleep(5)
         self.reset_console()
         time.sleep(1)
-        self.fprint("You are at your hastily-thrown together camp.")
+        self.fprint(" You are at your hastily-thrown together camp.")
         self.main()
        
 #######################################
@@ -381,7 +360,7 @@ class Game:
         
         
         """)
-    
+     
     
     
     
@@ -440,7 +419,7 @@ class Game:
             player.biome = "Grassland"
         elif (player.x == -9 and player.y == -3) or (player.x == -9 and player.y == -4) or (player.x == -8 and player.y == -4) or (player.x == -8 and player.y == -5) or (player.x == -8 and player.y == -6) or (player.x == -7 and player.y == -6) or (player.x == -7 and player.y == -8) or (player.x == -6 and player.y == -8) or (player.x == -5 and player.y == -8) or (player.x == -4 and player.y == -8) or (player.x == -4 and player.y == -9) or (player.x == -3 and player.y == -9) or (player.x == -2 and player.y == -9):
             player.biome = "River"
-        elif ( -8 <= player.x <=7 and player.y == 8) or (player.x == 4 and 7 <= player.y <= 4) or (player.x == 3 and -2 <= player.y <= -6) or ( -2 <= player.x <= 3 and player.y == -6) or (-8 <= player.x <= -2 and player.y == -7) or (player.x == 7 and 8 <= player.y <= 5) or (player.x ==8 and player.y == 5):
+        elif ( -8 <= player.x <=7 and player.y == 8) or (player.x == 4 and -2 <= player.y <= 7) or ( -2 <= player.x <= 3 and player.y == -6) or (-8 <= player.x <= -2 and player.y == -7) or (player.x == 7 and 5 <= player.y <= 8) or (player.x ==8 and player.y == 5) or (player.x == 3 and player.y == -5) or (player.x == 3 and player.y == -4) or (player.x ==3  and player.y == -3) or (player.x ==3 and player.y == -2):
             player.biome = "Road" 
         elif (player.x == 9 and player.y == 5) or (player.x == -9 and player.y == -7):
             player.biome = "Tunnel"
@@ -463,8 +442,8 @@ class Game:
             player.drink()
         elif a == "sleep":
             player.set_camp()
-        elif a == "scavenge":
-            player.scavenge()
+        #elif a == "scavenge":
+            #player.scavenge()
         elif a == "craft bandage":
             player.craft_bandage()
         elif a == "craft cloth":
@@ -569,8 +548,7 @@ class Game:
     # Print the bottom border
         print("└" + "───" * map_size + ("──" * 10) + "─" + "┘")
         
-        print("""
-                 
+        print("""  
                     MAP KEY
        
         U           ------          Player Location
@@ -612,11 +590,11 @@ class Game:
     def zombie(self):
         zombie_encounter = random.randint(1,3)
         if zombie_encounter == 1:
-            self.fprint("As you walk along, you hear the distinct sound of fast shuffling behind you. Whirling around, you're met face to face with a mutant zombie! \n Will you fight(f) or run away(r) ?")
+            self.fprint("As you walk along, you hear the distinct sound of fast shuffling behind you. Whirling around, you're met face to face with a mutant zombie! \nWill you fight(f) or run away(r) ?")
         elif zombie_encounter == 2:
-            self.fprint("You walk past a clump of decaying corpses, paying no heed to them. But suddenlly, one of the bodies move! A zombie leaps at you, barely missing. \n Will you fight(f) or run away(r) ?")
+            self.fprint("You walk past a clump of decaying corpses, paying no heed to them. But suddenlly, one of the bodies move! A zombie leaps at you, barely missing. \nWill you fight(f) or run away(r) ?")
         elif zombie_encounter == 3:
-            self.fprint("A zombie emerges from the shadows, intent on your demise. Its head is oozing blood, which trickles down like some unholy waterfall. \n Will you fight(f), or run away(r)? ")
+            self.fprint("A zombie emerges from the shadows, intent on your demise. Its head is oozing blood, which trickles down like some unholy waterfall. \nWill you fight(f), or run away(r)? ")
         while True:
             a = input ("\n> ")
             randomItem = random.randint(1, 5)
@@ -642,9 +620,24 @@ class Game:
                     player.fight("zombie", 100, random.randint(1, 25), randomItem, True, "It")
             elif a =="f":
                 player.fight("zombie", 100, random.randint(1,25), randomItem, True, "It")
+            else: 
+                self.fprint("That is an invalid command!")
                 break
-            
-                    
+    def roadZombie(self):
+        while True:
+            randomItem = random.randint(1, 5)
+            if randomItem == 1:
+                randomItem = "Cloth"
+            elif randomItem == 2:
+                randomItem = "Rope"
+            elif randomItem == 3:
+                randomItem = "Metal Wire"
+            elif randomItem == 4:
+                randomItem = "Tarp"
+            elif randomItem == 5:
+                randomItem = "Leather strip"
+            player.fight("zombie",100,random.randint(1,25), randomItem, True, "It")    
+            break            
             
    
    
@@ -657,28 +650,55 @@ class Game:
         while True:
             a = input("\n")
             if a == "n":
-                self.fprint("You went north.")
+                self.reset_console()
+
                 player.y += 1
                 self.update_state()
+            
+                self.print_map()
+                self.fprint("You went north.")
                 self.check_event()
+               
                 
+                
+            
             elif a == "s":
-                self.fprint("You went south.")
+                self.reset_console()
+                
                 player.y -= 1
                 self.update_state()
+                
+                self.print_map()
+                self.fprint("You went south.")
                 self.check_event()
                 
+                
+                
             elif a == "w":
-                self.fprint("You went west.")
+                
+                
+                self.reset_console()
                 player.x -= 1
                 self.update_state()
+                
+                self.print_map()
+                self.fprint("You went west.")
                 self.check_event()
-        
+                
+                
             elif a == "e":
-                self.fprint("You went east.")
+                self.reset_console()
+
                 player.x += 1
                 self.update_state()
+                
+                self.print_map()
+                self.fprint("You went east.")
                 self.check_event()
+
+                
+                
+                
                 
             elif self.player_command(a):
                 pass
@@ -691,7 +711,11 @@ class Game:
 
     def check_event(self):
         ## global (well, function vars but who cares) variables
+        
+
         tarp_used_blue_house = False
+
+
         if player.x == -8 and player.y == 9 and "House(-8,9)" in self.Locations:
             #LOCATION ID: House(-8,9)
             time.sleep(3)
@@ -887,9 +911,9 @@ Select a response. (1-3)
                 
                 elif a == "2":
                         self.slow_print(f"{Fore.GREEN}You:{Style.RESET_ALL} A friend! \n")
-                        self.slow_print(f"{Fore.RED}Unknown Voice:{Style.RESET_ALL} I don't have any friends! They're all dead, dumbass!\n")
-                        self.slow_print(f"{Fore.GREEN}You:{Style.RESET_ALL} Do you think we could work something out? We've come this far, do you really want to end it all now?\n")
-                        self.slow_print(f"{Fore.RED}Unknown Voice:{Style.RESET_ALL} You come into MY house, lie straight to my face, try to negotiate YOUR life, and expect me to be merciful? You got another thing coming, buddy!\n")
+                        self.slow_print(f"{Fore.RED}Unknown Voice:{Style.RESET_ALL} What the fuck are you doing in my house?\n")
+                        self.slow_print(f"{Fore.GREEN}You:{Style.RESET_ALL} Do you think we could work something out? You've come this far, it would be unfortunate to stop now.\n")
+                        self.slow_print(f"{Fore.RED}Unknown Voice:{Style.RESET_ALL} Better men have tried and failed to kill me. Stop hiding and face me!\n")
                         self.slow_print(f"{Fore.GREEN}You:{Style.RESET_ALL} All right! Hard way then.\n")
                         self.fprint("You take out your trusty firearm and step into the open hallway, and train your weapon upon a man, clad in black clothing, holding a pistol in your direction.\n")
                         randomItem = random.randint(1,3)
@@ -907,10 +931,10 @@ Select a response. (1-3)
                 elif a == "3": 
                         self.slow_print(f"{Fore.GREEN}You:{Style.RESET_ALL} Someone you don't want to mess with, so back up!\n")
                         self.slow_print(f"{Fore.RED}Unknown Voice:{Style.RESET_ALL} No, you back up you motherfucker! Get out of my goddamn house!\n")
-                        self.slow_print(f"{Fore.GREEN}You:{Style.RESET_ALL} There's no property in this world, man. Take my advice, get out of here with your life.\n")
+                        self.slow_print(f"{Fore.GREEN}You:{Style.RESET_ALL} I'm just tryna live, same as you man!\n")
                         self.slow_print(f"{Fore.RED}Unknown Voice:{Style.RESET_ALL} Fuck you!\n")
                         self.slow_print(f"{Fore.GREEN}You:{Style.RESET_ALL} You've made your choice!\n")
-                        self.fprint("You take out your trusty firearm and take a deep breath. Without another thought, you take a step out into the hallway and aim your weapon at a man, clad in black clothing, who is holding a pistol in your direction.")
+                        self.fprint("You take out your weapon and take a deep breath. Without another thought, you take a step out into the hallway to see a man, clad in black clothing, who is holding a pistol in your direction.")
                         randomItem = random.randint(1,3)
                         if randomItem == 1:
                             randomItem = "Cloth"
@@ -964,34 +988,169 @@ Or, continue to explore the town.
                 self.fprint("There's nothing else here for you. You carefully hop out of the window, avoiding any glass.")
                 break
         elif player.x == -6 and player.y == 9 and "House(-6,9)" in self.Locations:
+            visited_rooms = []
+
+            def cellar_choices():
+                while True:
+                    self.fprint("What do you do?")
+
+                    c = input("\n>")
+                    if c == "enter":
+                        self.fprint("You fling open the cellar door, and descend into the depths of the townhouse.")
+                        time.sleep(2)
+                        cellar_opening()
+                    else:
+                        break
+            def room_choices():
+                while True:
+                    self.fprint("Where do you go?")
+
+                    if '1' not in visited_rooms:
+                        self.fprint("Type '1' to enter the first opening.")
+                    if '2' not in visited_rooms:
+                        self.fprint("Type '2' to enter the second opening.")
+                    if '3' not in visited_rooms:
+                        self.fprint("Type '3' to enter the third opening.")
+                    if ('1' and '2' and '3') in visited_rooms:
+                        self.fprint("You have already visited all the rooms.")
+                    break
+
+                b = input("\n>")
+                if b == '1' and '1' not in visited_rooms:
+                    visited_rooms.append('1')
+                    room1()
+                elif b == '2' and '2' not in visited_rooms:
+                    visited_rooms.append('2')
+                    room2()
+                elif b == '3' and '3' not in visited_rooms:
+                    visited_rooms.append('3')
+                    room3()
+                else:
+                    self.fprint("Invalid choice, please try again.")
+
+
+
+
+            def room1():
+                self.fprint("As you slowly walk into the room, you notice furniture strewn about.")                            
+                time.sleep(3)
+                self.fprint("There is a large kitchen table in the center, with broken chairs on the floor. In the center is a an extravagant platter of rotten food, flies buzzing.")
+                time.sleep(4)
+                self.fprint("There is seemingly nothing of value in this room, aside from a few strips of cloth you manage to pull up from a chair.")
+                player.items.append("Cloth")
+                player.items.append("Cloth")
+                time.sleep(3)
+                self.fprint("You walk back into the hallway.")
+                room_choices()
+            def room2():
+                self.fprint("You take a few careful steps over to the second opening, and hear a noticable crunching noise. As you being to peer inside the room, there is a omnipresent black residue caking the ceiling and walls.")
+                time.sleep(4)
+                self.fprint("As you take a step inside the room, the residue seems to almost react to your presence, and the crunching stops. An uneasy, eerie silence falls over the room.")
+                time.sleep(4)
+                self.fprint("Now in the middle of the dark room, you turn on your flashlight to get your bearings. ")
+                time.sleep(3)
+                self.fprint("As you survey the room, your light seems to reflect back in one corner as you quickly sweep it across the room. You slowly turn over to the reflection, resting your flashlight on it once again.")
+                time.sleep(5)
+                self.fprint("The reflection looks back.")
+                time.sleep(3)
+                self.fprint("A pair of white, irridescent eyes is the only evidence of a being in that dark corner. As it stands up, it seems to continually get bigger and bigger, rising to a stature of at least 8 feet.")
+                time.sleep(5)
+                self.fprint("As it does so, it unfurls its fingers from its hands - dripping with a black tar, long, and utterly terrifying.")
+                time.sleep(4)
+                self.fprint("You begin backing up into a corner in the room, as your heart begins to beat within your chest. You feel only fear.")
+                time.sleep(4)
+                self.fprint("The black creature seems to study you for a moment, before taking a strong but slow step forward.")
+                time.sleep(4)
+                self.fprint("And then another.")
+                time.sleep(4)
+                self.fprint("Step.")
+                time.sleep(.3)
+                self.fprint("Step.")
+                time.sleep(.3)
+                self.fprint("Step.")
+                time.sleep(.3)
+                self.fprint("Step.")
+                time.sleep(.3)
+                self.fprint("Step.")
+                time.sleep(.3)
+                self.fprint("The creature seems to close the distance between the both of you in a split second, and reaches back to lash at you with its arm!")
+                randomItem = random.randint(1,3)
+                if randomItem == 1:
+                    randomItem = "Black Ooze"
+                elif randomItem == 2:
+                    randomItem = "Irridescent Eye"
+                elif randomItem == 3:
+                    randomItem = "Blackened Tooth"
+                player.fight("Black Creature", 150, random.randint(15,25), randomItem, True, "It")
+                time.sleep(2)
+                self.fprint("The already decaying body of the black creature seems to sink into floorboards.")
+                time.sleep(2)
+                self.fprint("Catching your breath, you grab the " + randomItem + " from your pack. It seems to hold a strange and unnatural power. You quickly put it away again just in case.")
+                time.sleep(4)
+                self.fprint("You take a few steps out of the room, and back into the hallway.")
+                room_choices()
+            def room3():
+                self.fprint("You walk up the stairs.")
+                return
+            def cellar_opening():
+                time.sleep(2)
+                self.fprint("As you descend, the damp floorboards beneath your feet squeak and shake under your presence.")
+                time.sleep(2)
+
+            
+            
             self.fprint("You stand in front of a white townhouse, its two stories a prominent and unique characteristic among the other houses in this town. There seems to be a potent stench coming from within, immediately taking over your senses. \nIt is in rough condition, but still stands, with a sturdy grey door blocking any line of sight into the building. \n")
-            time.sleep(2)
+            time.sleep(6)
             self.fprint("Closer inspection reveals that the door is unlocked.")
+            time.sleep(2)
             self.fprint(""""
 Type 'enter' to enter through the grey door.
 Type 'investigate' to go around the backside of the house.
 Or, continue to explore the town. """)
             time.sleep(2)
+            
             while True:
-                rooms = ["Room1", "Room2", "Room3"]
-                a = input("\n>")
+                
+
+                a = input("\n> ")
                 if a == "enter":
                     self.fprint("You walk up to the landing, and slowly open the door. \n")
                     time.sleep(1)
-                    self.fprint("Your eyes are met by a long hallway, strewn with trash and assorted debris. \nThe stench you could smell from outside has become even more powerful - and the ceiling tiles above you have been darkened and soaked with a black substance, which slowly drips down in front of you.\n  ")     
+                    self.fprint("Your eyes are met by a long hallway, strewn with trash and assorted debris.")
+                    time.sleep(2)
+                    self.fprint("The stench you could smell from outside has become even more powerful - and the ceiling tiles above you have been darkened and soaked with a black substance, which slowly drips down in front of you.")     
                     time.sleep(3)
                     self.fprint("The hallway has 3 openings: one to your direct left, which leads into an adjacent room. \nThe second is in the middle of the hallway on your right, which would seemingly enter into another room. \nThe third is on the complete other end of the hallway, which seems to be the stairs to go up to the second story.")
                     time.sleep(5)
-                    self.fprint("Where do you go?")
-                    self.fprint(""" 
-Type '1' to enter the first opening.
-Type '2' to enter the second opening.
-Type '3' to enter the third opening.   """)
-                    while True:
-                        a = input("\n>")
-                        if a == 1:
-                            rooms.remove("Room1")
-                            self.fprint("")
+                    room_choices()
+                elif a == "investigate":
+                    self.fprint("You walk around the back of the building, and notice a cellar door in the ground. It seems to be unlocked")
+                    time.sleep(2)
+                    self.fprint("You take a deep breath, and delve inside.")
+                    cellar_opening()
+                else: 
+                    self.fprint("You step away from the house.")
+                    return
+                
+                    
+            
+                        
+
+
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                
+                            
 
 
             
@@ -1018,84 +1177,164 @@ Type '3' to enter the third opening.   """)
         elif -10 <= player.x <= 10 and player.y == 11:
             self.fprint("You decide to continue up the mountain, desiring an escape from this dangerous valley. As you head up the mountains, the cold air whips at your skin, lapping at the last of your heat. \nAs you crest over the first range, you see nothing but endless wilderness for miles. Your eyes get heavy, and the cold darkness takes you.")
             game.die()
-        else: pass
-        
+
         ###############################################
-     
+        
+        ### Biome Designated Rando Events
+        elif player.biome == ("Road"):
+            self.fprint("You're on an old, asphalt road, littered with abandoned cars.")
+
+            
+            chance_road_event = random.randint(1,2)
+            if chance_road_event == 1:
+            
+
+                road_event = random.randint(1,5)
+
+                if road_event == 6:
+                    self.fprint("As you walk through the maze of cars and trucks, a ganarly hand reaches out from under a sedan, grabbing your ankle!")
+                    time.sleep(4)
+                    self.fprint("After a brief struggle, you trip and fall on your back, trying to get away. A zombie rises from under the sedan, lashing out!")
+                    time.sleep(4)
+                    self.roadZombie()
+                    pass
+                if road_event == 2:
+                    descriptor_word = " a "
+                    randomRoadItem = random.randint(1,5)
+                    if randomRoadItem == 1:
+                        randomRoadItem ="Metal Spring"
+                    if randomRoadItem == 2:
+                        randomRoadItem = "Cloth"
+                        descriptor_word = " a piece of "
+                    if randomRoadItem == 3:
+                        randomRoadItem = "Metal Pipe"
+                    if randomRoadItem == 4:
+                        randomRoadItem = "Ceramic"
+                        descriptor_word = " a piece of "
+                    if randomRoadItem == 5:
+                        randomRoadItem = "Medkit"
+
+                    self.fprint("A large van stands in the middle of the road, its trunk slightly popped open.")
+                    time.sleep(2)
+                    self.fprint("You slowly and cautiously open the trunk, and find" + descriptor_word + randomRoadItem + "!")
+                    player.items.append(randomRoadItem)
+                    time.sleep(2)
+                    pass
+                if road_event == 3:
+                    randomHumanDescriptor = random.randint(1,3)
+                    if randomHumanDescriptor == 1:
+                        self.fprint("From out the of forest slightly ahead of you, you watch as a scavenger slowly weaves his way through some cars, and begins looting a truck.")
+                    elif randomHumanDescriptor == 2:
+                        self.fprint("You hear the far-off screams of someone calling for help, which are quickly cut off short.")
+                    elif randomHumanDescriptor ==3:
+                        self.fprint("Walking down the road, you see the distinct shape of another human digging through the contents of a small car. ")
+
+
+        
+        elif player.biome == ("Forest"):
+            jacob_letter_found = False
+            self.fprint("You're in a forest. Trees stretch around and above you on all sides.")
+            chance_forest_event = random.randint(1,15)
+            if chance_forest_event == (1):
+                if jacob_letter_found == True:
+                    forest_event = random.randint (1,4)
+                else:
+                    forest_event = random.randint(1,5)
+                
+                if forest_event == 1:
+                    self.fprint("As you walk through the forest, you hear the brisk shuffing of feet behind you. As you turn around, you are suddenly faced with a zombie!")
+                    time.sleep(2)
+                    self.zombie()
+                    return
+                if forest_event == 2:
+                    self.fprint("You stumble upon an apple tree, ripe for the picking. You take as many as you can carry, and then move on.")
+                    time.sleep(2) 
+                    self.fprint("You found 3 food!")
+                    player.items.append("Food")
+                    player.items.append("Food")
+                    player.items.append("Food")
+                if forest_event == 3:
+                    self.fprint("As you walk amongst the trees, you feel like someone is watching you.")
+                    time.sleep(2)
+                    self.zombie()
+                    time.sleep(2)
+                    return
+                if forest_event == 4:
+                    self.fprint("The trees give way to a small clearing, and in the center lies a hastily torn down camp - with some resources strewn about. ")
+                    time.sleep(4)
+                    camp_items = random.randint(1,3)
+                    if camp_items == 1:
+                        player.items.append("Wire")
+                        player.items.append("Circuit Board")
+                        time.sleep(2)
+                        self.fprint("A busted up speaker yields some wire, and a circuit board.")
+                        time.sleep(2)
+                    if camp_items == 2:
+                        player.items.append("Cloth")
+                        player.items.append("Medkit")
+                        player.items.append("Tarp")
+                        time.sleep(2)
+                        self.fprint("You find some cloth, a tarp, and a medkit.")
+                        time.sleep(3)
+                    if camp_items == 3:
+                        player.items.append("Cloth")
+                        player.items.append("Cloth")
+                        player.pistol_ammo += 12
+                        time.sleep(2)
+                        self.fprint("You find some cloth, and 12 rounds for your pistol strewn about.")
+                        time.sleep(3)
+                if forest_event == 5:
+                    self.fprint("As you walk through the forest, the distinct smell of death hits you. A few feet away, a man wearing street clothes is slumped against a tree, with a knife stuck in his chest.")
+                    time.sleep(3) 
+                    self.fprint("\nAn investigation of his body reveals a distinct bite on his neck.")
+                    time.sleep(3)
+                    self.fprint("\nYou notice a crunched up piece of paper in his left. \nThe letter, scrawled in pencil, with a few blood droplets on it, reads:")
+                    time.sleep(3)
+                    self.fprint("""
+
+                    
+Connor,
+
+
+I'm so sorry. You probably won't ever get this. I don't even know why I'm writing it.
+I'm not letting it take me. Tell all the guys at Eden I love 'em. Tell Mom I love her.
+
+I can feel it coming on again. 
+Goodbye.
+
+Jacob.
+                    
+                    
+                    
+                                
+                    
+                    """)
+                    time.sleep(5)
+                    
+                    player.items.append("Jacob's letter")
+                    jacob_letter_found = True
+                    self.fprint("You stuff the letter in your pocket, pay your respects, and continue on.")
+                    time.sleep(3)
+                
+
+                else: pass
+                        
+        
+        
+        
+        
+        
+        else: pass
 
 
                         
                         
                         
+                                 
                         
                         
                         
-                        
-                        
-                        
-                        
 
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-
-
-
-
-
-
-
-
-
-        #event = random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20])
-     #   if event == 1:
-      #      self.fprint("You can hear every step you take - and then some. Is someone following you?")
-       # elif event == 2:
-       #     self.fprint("The grass is a bit squishy here. Kinda wet.")
-       ## elif event == 3:
-       #    self.fprint("You pull up next to a large oak tree. A small squirrel scurries through the branches, seemingly unaware of the horror you face every day.")
-       # elif event == 4:
-       #     self.fprint("You come up on a large, grassy hill. You can see the forests surrounding you for miles. ")
-       # elif event == 5:
-       #     self.fprint("You come upon a dusty old pickup truck. How it got here would be anyone's guess - but it had a can of beans in it.")
-       # elif event == 6:
-       #     self.fprint("There's and old treehouse here. Climbing up into it reveals a few naked dead bodies, holding eachother in a dear embrace. How touching.")
-       # elif event == 7:
-       #     self.fprint("Next to an old road, a nearly pristine white refridgerator sits slightly off the road. Upon approach, a stiff skeleton can be see residing within. A comfy place to call home. ")  
-       # elif event == 8:
-       #     self.fprint("The forest gives way to a dip in the ground, revealing a minature valley amidst the towering trees. Careful examination reveals an old campsite, thorough picked through way before you got there.")
-       # elif event == 9:
-        #    self.fprint("As you clear the tree line, a random naked man can be seen running a few hundred yards to the north. In front of him, you can just barely catch the tail of a deer. ")
-        #elif event == 10: 
-        #    self.fprint("As you pick through dense foliage, the moon shines bright over the dark forest.")
-        #elif event == 11:
-       #     self.fprint("Stepping into a clearing, you bump the half-eaten remains of a man below your feet. Poor fucker.")
-       # elif event == 12:
-       #     self.fprint("As you walk next to a river, evidence of a brutal skirmish between scavengers and a bunch of zombies can be seen, with blood pooling over the sand and into the river.")
-       # elif event == 13:
-       #     self.fprint("You whisle a tun to yourself from back when you were a kid. You've forgotten the name.")
-       # elif event == 14:
-       #     self.fprint ("As you walk over a rocky hill, the only sound to keep you company is the clang of your weapon against your trusty pan you've tied to the side of your pack.")
-       # elif event == 15:
-        #    self.fprint("You stop by a river, and using reflection of the water, use your knife to shave your unruly beard.")
-        #elif event == 16:
-        #    self.fprint("Just for a second, you feel like you heard the sound of laughter.")
-        #elif event == 17:
-        #    self.fprint("Why are the trees watching you?")
-        #elif event == 18:
-        #    self.zombie()
-        #elif event == 19:
-        #    self.zombie()
-        #elif event == 20:
-        #    self.zombie()
 
 class Player:
     def __init__(self, x, y, health, hunger, energy, thirst, attack, gold, pistol_ammo, shotgun_ammo,
@@ -1137,6 +1376,7 @@ class Player:
             game.fprint("You do not have any Medkits.")
         else:
             game.fprint("Your health is already full.")
+            
 
 
 
