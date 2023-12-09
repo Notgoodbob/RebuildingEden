@@ -1,5 +1,5 @@
-## REBUILDING EDEN ALPHA 1.2 - JACKSON HERMSMEYER -
-## JAN 2 RELEASE
+## REBUILDING EDEN ALPHA 0.5.4 - JACKSON HERMSMEYER -
+## DEC 8 '23 RELEASE
 ###########################################
 ##############################################
 ###############################################
@@ -17,7 +17,6 @@ class Game:
         self.day = day
         self.Locations = ["House(-8,9)", "House(-7,9)", "House(-6,9)"]
         
-## 4 below functions are not mine, purely for textual cosmetics
 ##slowly puts out text
 
     def slow_print(self, str, delay = 0.1):
@@ -85,10 +84,9 @@ class Game:
     'crafting'   ----    opens the crafting menu
     'bandage'    ----    restores some of the player's health (requires bandage)
     'treat'      ----    restores a majority of the player's health (requires medkit)
-    'sleep'   ----       allows the player to sleep, and restores the player's energy (requires 1 wood to make a fire)
+    'sleep'      ----    allows the player to sleep, and restores the player's energy (requires 1 wood to make a fire)
     'eat'        ----    restores player's hunger (requires food)
     'drink'      ----    restores player's thirst (requires water)
-    'scavenge'   ----    allows the player to scavenge for items (requires energy)
     'day'        ----    shows the current day
     'health'     ----    shows the player's current stats
     'inventory'  ----    shows the player's current inventory
@@ -117,7 +115,7 @@ class Game:
             self.fprint("""     
             
                     Rebuilding Eden
-        Alpha 1.5.3 Release - By Jackson Hermsmeyer
+        Alpha 0.5.4 Release - By Jackson Hermsmeyer
                      Type 'play'.
             
             
@@ -228,8 +226,7 @@ class Game:
        - Fixed a bug where crafting 1 bandage would give you an infinite amount of bandages
        - Fixed a bug that allowed health over 100
        - Fixed a bug that killed the player after using a bandage
-       - Fixed a bug that would crash the game after the intro text "You are alone" was shown (I HAVE NO IDEA HOW THIS WORKED)
-       - Fixed a bug that spammed the numbers "0, 0, 100, 100, 100, 100, 0, 500, 20, 0, 0" over and over again (Game was printing the player's stats every .1 second)
+       - Fixed a bug that would crash the game after the intro text "You are alone" was shown
         
         
         
@@ -322,7 +319,7 @@ class Game:
             - Spelling / Grammar errors
 
 
-
+        -------------------------------------------------------------------------------------------------------------------------------------------------
         
         Rebuilding Eden Alpha 1.5.3 Patch Notes
 
@@ -347,9 +344,22 @@ class Game:
             - A few spelling mistakes
 
 
+        -------------------------------------------------------------------------------------------------------------------------------------------------
 
-
+        Rebuilding Eden Alpha 0.5.4 Patch Notes Dec. 8, '23
     
+        NEW:
+              - Changed version number to represent alpha status
+              - Finished level design on two-story white house
+              - Biome Marker system fully released for the following biomes:
+                    1) Forest
+                    2) Roads (80%)
+        BUG FIXES:
+              - None
+        
+        CHANGES:
+              - A few spelling mistakes
+              
 
          
         
@@ -710,7 +720,7 @@ class Game:
 
 
     def check_event(self):
-        ## global (well, function vars but who cares) variables
+
         
 
         tarp_used_blue_house = False
@@ -990,17 +1000,6 @@ Or, continue to explore the town.
         elif player.x == -6 and player.y == 9 and "House(-6,9)" in self.Locations:
             visited_rooms = []
 
-            def cellar_choices():
-                while True:
-                    self.fprint("What do you do?")
-
-                    c = input("\n>")
-                    if c == "enter":
-                        self.fprint("You fling open the cellar door, and descend into the depths of the townhouse.")
-                        time.sleep(2)
-                        cellar_opening()
-                    else:
-                        break
             def room_choices():
                 while True:
                     self.fprint("Where do you go?")
@@ -1073,7 +1072,7 @@ Or, continue to explore the town.
                 time.sleep(.3)
                 self.fprint("Step.")
                 time.sleep(.3)
-                self.fprint("The creature seems to close the distance between the both of you in a split second, and reaches back to lash at you with its arm!")
+                self.fprint("The creature closes the distance between the both of you in a split second, and reaches back to lash at you with its arm!")
                 randomItem = random.randint(1,3)
                 if randomItem == 1:
                     randomItem = "Black Ooze"
@@ -1091,11 +1090,58 @@ Or, continue to explore the town.
                 room_choices()
             def room3():
                 self.fprint("You walk up the stairs.")
+                time.sleep(1)
+                self.fprint("As you ascend the stairs, your eyes are met with another disturbing sight - the same black ooze you saw before now completely covers the floor and ceiling of this second floor. \n")
+                time.sleep(4)
+                self.fprint("Though there was once most likely some distinct rooms up here, all the walls seemingly have disappeared, replaced by black mass.  ")
+                time.sleep(3)
+                self.fprint("Creeping into the main area, you find a storage box amidst the rubble and ooze. Inside, you find some supplies.")
+                time.sleep(2)
+                self.fprint("You found 6 cloth!")
+                player.items.append("Cloth")
+                player.items.append("Cloth")
+                player.items.append("Cloth")
+                player.items.append("Cloth")
+                player.items.append("Cloth")
+                player.items.append("Cloth")
+                time.sleep(.5)
+                self.fprint("You found 5 shotgun shells!")
+                player.shotgun_ammo+= 5
+                time.sleep(.5)
+                self.fprint("You found an old map!")
+                player.items.append("Old Map")
+                time.sleep(.5)
+                self.fprint("Tip: enter 'read old map' to examine the contents of the map. ")
+                time.sleep(1)
+                self.fprint("Not wanting to disturb whatever could be living here, you cautiously step down the stairs, and leave the building.")
+                game.Locations.remove("House(-6,9)")
                 return
+    
+            
+            
+            
+            
+            
             def cellar_opening():
                 time.sleep(2)
                 self.fprint("As you descend, the damp floorboards beneath your feet squeak and shake under your presence.")
                 time.sleep(2)
+                self.fprint("The air down in the cellar is heavy, and every move you make further into it drains you. After only a few steps, you have to catch yourself on the wall to stop from falling.")
+                time.sleep(4)
+                self.fprint("Do you continue? (Yes or No?)")
+                a = input(">")
+                if a == "Yes" or "yes":
+                    self.fprint("You decide to continue into the darkness. Each step and each breath becomes more laborious, until you collapse on the floor.")
+                    time.sleep(2)
+                    self.fprint("In your last few moments of consciousness, you feel a slimy tendril grab you by your arm, and it pulls you into the dark depths...")
+                    game.die()
+                elif a == "No" or "no":
+                    self.fprint("Thinking better of it, you manage to stumble out of the cellar and into the backyard of the house.")
+                    return
+                else:
+                    self.fprint("That is an invalid command!")
+
+
 
             
             
@@ -1103,7 +1149,7 @@ Or, continue to explore the town.
             time.sleep(6)
             self.fprint("Closer inspection reveals that the door is unlocked.")
             time.sleep(2)
-            self.fprint(""""
+            self.fprint("""
 Type 'enter' to enter through the grey door.
 Type 'investigate' to go around the backside of the house.
 Or, continue to explore the town. """)
@@ -1131,7 +1177,36 @@ Or, continue to explore the town. """)
                 else: 
                     self.fprint("You step away from the house.")
                     return
-                
+        elif player.x == -6 and player.y == 9 and "House(-6,9)" not in self.Locations:
+            self.fprint("Since you've last visited this house, you've noticed that the distinct smell permeating from the house itself has lessened, and further investigation inside shows that not much else has changed.")
+            self.fprint("The cellar could still be investigated, though.")
+            self.frpint("Type 'enter cellar' to explore the cellar, or continue to explore the town.")
+            a = input("\n> ")
+            if a == "enter cellar" or "Enter cellar" or "Enter Cellar" or "enter Cellar":
+                time.sleep(2)
+                self.fprint("As you descend, the damp floorboards beneath your feet squeak and shake under your presence.")
+                time.sleep(2)
+                self.fprint("The air down in the cellar is heavy, and every move you make further into it drains you. After only a few steps, you have to catch yourself on the wall to stop from falling.")
+                time.sleep(4)
+                self.fprint("Do you continue? (Yes or No?)")
+                a = input(">")
+                if a == "Yes" or "yes":
+                    self.fprint("You decide to continue into the darkness. Each step and each breath becomes more laborious, until you collapse on the floor.")
+                    time.sleep(2)
+                    self.fprint("In your last few moments of consciousness, you feel a slimy tendril grab you by your arm, and it pulls you into the dark depths...")
+                    game.die()
+                elif a == "No" or "no":
+                    self.fprint("Thinking better of it, you manage to stumble out of the cellar and into the backyard of the house.")
+                    return
+                else:
+                    self.fprint("That is an invalid command!")
+            else:
+                self.fprint("You step away from the house.")
+                return
+
+
+            
+            
                     
             
                         
@@ -1220,6 +1295,8 @@ Or, continue to explore the town. """)
                     player.items.append(randomRoadItem)
                     time.sleep(2)
                     pass
+
+                ########################################################## ROAD EVENT WIP
                 if road_event == 3:
                     randomHumanDescriptor = random.randint(1,3)
                     if randomHumanDescriptor == 1:
@@ -1234,7 +1311,7 @@ Or, continue to explore the town. """)
         elif player.biome == ("Forest"):
             jacob_letter_found = False
             self.fprint("You're in a forest. Trees stretch around and above you on all sides.")
-            chance_forest_event = random.randint(1,15)
+            chance_forest_event = random.randint(1,10)
             if chance_forest_event == (1):
                 if jacob_letter_found == True:
                     forest_event = random.randint (1,4)
