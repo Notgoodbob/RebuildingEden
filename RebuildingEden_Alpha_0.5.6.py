@@ -1,5 +1,5 @@
-## REBUILDING EDEN ALPHA 0.5.5 - JACKSON HERMSMEYER -
-## DEC 9 '23 RELEASE
+## REBUILDING EDEN ALPHA 0.5.6 - JACKSON HERMSMEYER -
+## DEC 10 '23 RELEASE
 ###########################################
 ##############################################
 ###############################################
@@ -81,6 +81,7 @@ class Game:
     'w'          ----    moves the player west
     'map'        ----    opens the player's map
     'location'   ----    shows the player's current map coordinates
+    'quests'     ----    shows current quests
     'crafting'   ----    opens the crafting menu
     'bandage'    ----    restores some of the player's health (requires bandage)
     'treat'      ----    restores a majority of the player's health (requires medkit)
@@ -124,7 +125,7 @@ class Game:
             self.fprint("""     
             
                     Rebuilding Eden
-        Alpha 0.5.5 Release - By Jackson Hermsmeyer
+        Alpha 0.5.6 Release - By Jackson Hermsmeyer
                      Type 'play'.
             
             
@@ -374,6 +375,7 @@ class Game:
         -------------------------------------------------------------------------------------------------------------------------------------------------
               
         Rebuilding Eden Alpha 0.5.5 Patch Notes Dec. 9, '23
+        
         NEW:
               - Added Axe
               - Added Scrap Axe
@@ -396,7 +398,22 @@ class Game:
               - Spelling mistakes
               - Grammar mistakes
 
-              
+        -------------------------------------------------------------------------------------------------------------------------------------------------
+
+        Rebuilding Eden Alpha 0.5.6 Patch Notes Dec. 10, '23
+        
+        NEW:  
+              - Added 3 Quests (2 still WIP)
+              - Added quest viewing system
+        
+        BUG FIXES:
+              - Fixed a bug that allowed you to completely ignore zombie encounters
+
+        CHANGES:
+              - Adjusted some textual inconsistencies
+              - Spelling mistakes
+              - Grammar mistakes
+
 
          
         
@@ -505,7 +522,11 @@ class Game:
             player.craft_rope()
        
        
-       
+       # quests
+        elif a == "read map":
+            player.read_map()
+        elif a == "quests":
+            player.quest_list()
        
        # misc
         elif a == "day":
@@ -530,8 +551,7 @@ class Game:
             self.patchnotes()
         elif a == "map":
             self.print_map()
-        elif a == "read map":
-            self.read_map()
+        
         
         #debugging commands
         
@@ -550,6 +570,9 @@ class Game:
             player.items.append("Rope")
             player.items.append("Rope")
             player.items.append("Ceramic")
+            player.items.append("Old Map")
+            player.items.append("Jacob's letter")
+            player.items.append("Chris' letter")
 
         
         else:
@@ -684,7 +707,7 @@ class Game:
                 player.fight("zombie", 100, random.randint(1,25), randomItem, True, "It")
             else: 
                 self.fprint("That is an invalid command!")
-                break
+                
     def roadZombie(self):
         while True:
             randomItem = random.randint(1, 5)
@@ -1254,8 +1277,40 @@ Or, continue to explore the town. """)
                 self.fprint("You step away from the house.")
                 return
 
+## old map
 
+        elif player.x == 7 and player.y == -9 and "Old Map" in player.items:
+            game.fprint("As you come upon the land indicated by the map, you notice a very faint spray paint marking on the dirt nearby.")
+            time.sleep(5)
+            game.fprint("You set the map aside and begin digging.")
+            time.sleep(3)
+            game.fprint("As you are digging, you feel a thud as your hands come in contact with a hard, wooden surface.")
+            time.sleep(3)
+            game.fprint("You eventually pull a long wooden box from out of the ground, and open it up.")
+            time.sleep(3)
+            game.fprint("Within, you find a Shotgun and some buckshot ammo for the weapon.")
+            player.items.append("Shotgun")
+            player.shotgun_ammo += 12
+            time.sleep(3)
+            game.fprint("To the side of where the Shotgun used to lie, you find a handwritten note. It reads:")
+            time.sleep(3)
+            game.fprint("""
 
+Laura,
+
+I hope you got out of there safely. I always knew damn scavs would come poking their way into Lockard Springs.    
+If you've made it this far, I know you'll survive this place. Nearby is our safehouse. You know the one. I'll try to be there.
+I love you.
+
+- Chris
+                    
+                        """)
+            player.items.append("Chris' letter")
+            player.items.remove("Old Map")
+            time.sleep(8)
+            game.fprint("You grab the letter and store it in your pack, and take a brief glance at your surroundings.")
+            time.sleep(2.5)
+            game.fprint("Nothing has changed. You get up and continue onward.")
             
         ## death barriers
         #############################################
@@ -1370,7 +1425,7 @@ Or, continue to explore the town. """)
                         dead_pronoun = "her"
                     if dead_pronoun == 2:
                         dead_pronoun = "his"
-                    self.fprint("You come upon the long-dead body of a " + dead_body_descriptor + "Upon opening " + dead_pronoun + " pack, you find some food and water.")
+                    self.fprint("You come upon the long-dead body of a " + dead_body_descriptor + " Upon opening " + dead_pronoun + " pack, you find some food and water.")
                     player.items.append("Water")
                     player.items.append("Food")
                     time.sleep(2)
@@ -1653,8 +1708,33 @@ class Player:
 
 
 
+    def quest_list(self):
+        ## check to see what quest items and / or quest prompts are active
+        ## currently only (2)
+        questList = []
+        
+        if "Old Map" in self.items:
+            if player.x == -7 and player.y ==9:
+                questList.append("Mysterious Map - Examine the X on the ground at your current coordinates.")
+            else:
+                questList.append("Mysterious Map - Travel to the coordinates (-7, 9) and search for an X on the ground.")
+        if "Jacob's letter" in self.items:
+            questList.append("Jacob's Last Request - Find 'Eden' and inform his friends and family of his passing.")  
+        if "Chris' letter" in self.items:
+            questList.append("A Message for Laura - Find the safehouse, and search for Laura & Chris.")
+        
+
+        if questList:
+            game.fprint("Current Quests: \n")
+            for quest in questList:
+                game.fprint(quest)
+        else:
+            game.fprint("No active quests at the moment.")
 
 
+        
+            
+                        
 
   ## function for drinking
     def drink(self):
