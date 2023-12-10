@@ -1,5 +1,5 @@
-## REBUILDING EDEN ALPHA 0.5.4 - JACKSON HERMSMEYER -
-## DEC 8 '23 RELEASE
+## REBUILDING EDEN ALPHA 0.5.5 - JACKSON HERMSMEYER -
+## DEC 9 '23 RELEASE
 ###########################################
 ##############################################
 ###############################################
@@ -97,12 +97,21 @@ class Game:
 
     def crafting(self):
         print("""This is a list of all craftable items in the game.
+       
+              
+        SUPPORT
+        Camp  (WIP)         ----    100 Wood + 5 Tarp                   ----    'set camp'
+        Bandage             ----    1 Cloth                             ----    'craft bandage'
+        2 Cloth             ----    1 Tarp                              ----    'craft cloth'
         
-        Camp            ----    100 Wood + 5 Tarp        ----    'set camp'
-        Bandage         ----    1 Cloth                  ----    'craft bandage'
-        2 Cloth         ----    1 Tarp                   ----    'craft cloth'
+        
+              
+        TOOLS      
+        Scrap Axe           ----    1 Roadsign + 1 Metal Pipe + 1 Rope  ----    'craft scrap axe'
+        
 
-        
+        ARMOR
+        Mkshft Armr (WIP)   ----    1 Ceramic + 1 Rope                  ----    'craft makeshift armor'
         
         
         
@@ -115,7 +124,7 @@ class Game:
             self.fprint("""     
             
                     Rebuilding Eden
-        Alpha 0.5.4 Release - By Jackson Hermsmeyer
+        Alpha 0.5.5 Release - By Jackson Hermsmeyer
                      Type 'play'.
             
             
@@ -347,7 +356,9 @@ class Game:
         -------------------------------------------------------------------------------------------------------------------------------------------------
 
         Rebuilding Eden Alpha 0.5.4 Patch Notes Dec. 8, '23
-    
+        
+        NEWS: Production of RE has begun again! I can't wait to restart again.
+        
         NEW:
               - Changed version number to represent alpha status
               - Finished level design on two-story white house
@@ -359,6 +370,32 @@ class Game:
         
         CHANGES:
               - A few spelling mistakes
+
+        -------------------------------------------------------------------------------------------------------------------------------------------------
+              
+        Rebuilding Eden Alpha 0.5.5 Patch Notes Dec. 9, '23
+        NEW:
+              - Added Axe
+              - Added Scrap Axe
+              - Added Makeshift Body Armor (WIP)
+              - Added Body Armor (WIP)
+              - Added Civilian Gas Mask (WIP)
+              - Added Road Flare (WIP)
+              - Added 2 Quest Items (Quest system still in progress)
+              - Added 4 additional road events
+              - Added Shotgun
+              - Added additional flavor text for pistol combat 
+       
+        BUG FIXES:
+              - Fixed the 'drink' command
+              
+        CHANGES:
+              - Reduced Road Event Spawn Rate
+              - Adjusted debug commands 
+              - Adjusted Crafting Menu to reflect new craftable items
+              - Spelling mistakes
+              - Grammar mistakes
+
               
 
          
@@ -451,13 +488,26 @@ class Game:
         elif a == "drink":
             player.drink()
         elif a == "sleep":
-            player.set_camp()
-        #elif a == "scavenge":
-            #player.scavenge()
+            player.sleep()
+        #tool usage
+        elif a == "use axe":
+            player.axeTool()
+
+
+       #crafting commands
         elif a == "craft bandage":
             player.craft_bandage()
         elif a == "craft cloth":
             player.craft_cloth()
+        elif a == "craft scrap axe":
+            player.craft_scrap_axe()
+        elif a == "craft rope":
+            player.craft_rope()
+       
+       
+       
+       
+       # misc
         elif a == "day":
             self.print_day()
         elif a == "health":
@@ -480,6 +530,8 @@ class Game:
             self.patchnotes()
         elif a == "map":
             self.print_map()
+        elif a == "read map":
+            self.read_map()
         
         #debugging commands
         
@@ -492,12 +544,12 @@ class Game:
             player.items.append("Cloth")
             player.items.append("Cloth")
             player.items.append("Cloth")
-            player.items.append("Cloth")
-            player.items.append("Cloth")
-            player.items.append("Cloth")
-            player.items.append("Cloth")
-            player.items.append("Cloth")
-            player.items.append("Cloth")
+            player.items.append("Food")
+            player.items.append("Bandage")
+            player.items.append("Road Sign")
+            player.items.append("Rope")
+            player.items.append("Rope")
+            player.items.append("Ceramic")
 
         
         else:
@@ -715,8 +767,7 @@ class Game:
             else:
                 self.fprint("That is an invalid command. Please type in a valid command. Type in 'help' if you need help.")
     
-    ## ALL LOCATION EVENTS MY FUCK THERE ARE SO MANY
-    
+
 
 
     def check_event(self):
@@ -812,6 +863,7 @@ Carefully going back into the white building, everything seems to be the same. I
                         self.indoorZombie()
                 self.fprint("You step away from the house, and onto the sidewalk.")
                 break
+        
         elif player.x == -7 and player.y == 9 and "House(-7,9)" in self.Locations:
             ## LOCATION ID: HOUSE(-7,9)
             time.sleep(3)
@@ -961,9 +1013,6 @@ Select a response. (1-3)
                 game.Locations.remove("House(-7,9)")
                 self.fprint("You step onto the sidewalk outside the house.")
                 break
-
-
-
         elif player.x == -7 and player.y == 9 and "House(-7,9)" not in self.Locations:
             self.fprint("This is the same blue house from a while ago. Nothing about it seems to have changed.\n To your north lie the great mountains. To the west is a white townhouse, and to the east a teal townhouse. To your south lies the 2 lane town road.")
             time.sleep(8)
@@ -997,6 +1046,7 @@ Or, continue to explore the town.
                 time.sleep(8)
                 self.fprint("There's nothing else here for you. You carefully hop out of the window, avoiding any glass.")
                 break
+        
         elif player.x == -6 and player.y == 9 and "House(-6,9)" in self.Locations:
             visited_rooms = []
 
@@ -1205,30 +1255,7 @@ Or, continue to explore the town. """)
                 return
 
 
-            
-            
-                    
-            
-                        
 
-
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                    
-                        
-                
-                            
-
-
-            
             
         ## death barriers
         #############################################
@@ -1259,14 +1286,17 @@ Or, continue to explore the town. """)
         elif player.biome == ("Road"):
             self.fprint("You're on an old, asphalt road, littered with abandoned cars.")
 
-            
+            ### ADD DESIGNATED ROADBLOCK AREA 
+            ## notes:
+            ## high traffic, warned off it 1 unit away.
+            ## much more dangerous, higher tier loot.
             chance_road_event = random.randint(1,2)
             if chance_road_event == 1:
             
 
-                road_event = random.randint(1,5)
+                road_event = random.randint(1,20)
 
-                if road_event == 6:
+                if road_event == 7:
                     self.fprint("As you walk through the maze of cars and trucks, a ganarly hand reaches out from under a sedan, grabbing your ankle!")
                     time.sleep(4)
                     self.fprint("After a brief struggle, you trip and fall on your back, trying to get away. A zombie rises from under the sedan, lashing out!")
@@ -1298,15 +1328,65 @@ Or, continue to explore the town. """)
 
                 ########################################################## ROAD EVENT WIP
                 if road_event == 3:
-                    randomHumanDescriptor = random.randint(1,3)
-                    if randomHumanDescriptor == 1:
-                        self.fprint("From out the of forest slightly ahead of you, you watch as a scavenger slowly weaves his way through some cars, and begins looting a truck.")
-                    elif randomHumanDescriptor == 2:
-                        self.fprint("You hear the far-off screams of someone calling for help, which are quickly cut off short.")
-                    elif randomHumanDescriptor ==3:
-                        self.fprint("Walking down the road, you see the distinct shape of another human digging through the contents of a small car. ")
+                    self.fprint("You spot an old stop sign on the side of the road with a sharp edge, and pick it up for safe keeping. ")
+                    player.items.append("Road Sign")
+                    time.sleep(1.9)
+                    self.fprint("You found a Road Sign!")
+                
+                if road_event == 4:
+                    police_car_descriptor_word = " a "
+                    police_car_loot = random.randint(1,5)
+                    if police_car_loot == 1:
+                        police_car_loot = "Shotgun"
+                        police_car_descriptor_word = " a "
+                    if police_car_loot == 2:
+                        police_car_loot = "Body Armor (WIP)"
+                        police_car_descriptor_word = " "
+                    if police_car_loot == 3:
+                        police_car_loot = "Road Flare"
+                        police_car_descriptor_word = " a "
+                    if police_car_loot == 4:
+                        police_car_loot = "Civilian Gas Mask"
+                        police_car_descriptor_word = " a "
+                    if police_car_loot == 5:
+                        police_car_loot = "Medkit"
+                        police_car_descriptor_word = " a "
+                
+                    self.fprint("As you walk down the road, you come upon an old police squad car. Inside, you grab" + police_car_descriptor_word + police_car_loot + "!")
+                    player.items.append(police_car_loot)
+                    time.sleep(3)
+                    self.fprint("You found" + police_car_descriptor_word + police_car_loot + "!")
+                
+                if road_event == 5:
+                    dead_body_descriptor = random.randint(1,2)
+                    dead_pronoun = random.randint(1,2)
 
-
+                    if dead_body_descriptor == 1:
+                        dead_body_descriptor = "raider."
+                    elif dead_body_descriptor == 2:
+                        dead_body_descriptor = "scavenger."
+                    
+                    if dead_pronoun == 1:
+                        dead_pronoun = "her"
+                    if dead_pronoun == 2:
+                        dead_pronoun = "his"
+                    self.fprint("You come upon the long-dead body of a " + dead_body_descriptor + "Upon opening " + dead_pronoun + " pack, you find some food and water.")
+                    player.items.append("Water")
+                    player.items.append("Food")
+                    time.sleep(2)
+                    self.fprint("You found Water!")
+                    time.sleep(.4)
+                    self.fprint("You found Food!")
+                
+                if road_event == 6:
+                    self.fprint("The gravel of the old paved road crunches under your feet as you pass by multiple wrecked cars.")
+                    time.sleep(2)
+                    self.fprint("You manage to grab a few pieces of scrap metal before leaving.")
+                    time.sleep(1.2)
+                    player.items.append("Scrap Metal")
+                    player.items.append("Scrap Metal")
+                    self.fprint("You found 2 Scrap Metal!")
+            
         
         elif player.biome == ("Forest"):
             jacob_letter_found = False
@@ -1455,7 +1535,16 @@ class Player:
             game.fprint("Your health is already full.")
             
 
-
+    def read_map(self):
+        if "Old Map" in self.items:
+            game.fprint("You take the old map out of your pack, and open it up.")
+            time.sleep(1)
+            game.fprint("The map itself is caked with blood on the right corner, and depicts a small area in the south-east of the valley. ")
+            time.sleep(3)
+            game.fprint("A large 'X' has been drawn over a grid on the small map, which, after coordinating it with your other map, seems to be nearby the cell (-7, 9)")
+            time.sleep(3)
+        else:
+            game.fprint("You have no other map to read!")
 
 
 
@@ -1484,6 +1573,28 @@ class Player:
             game.fprint("You don't have any food to eat.")
         else:
             game.fprint("You aren't hungry.")
+    def axeTool(self):
+        if "Axe" or "Scrap Axe" in self.items and self.biome == "Forest":
+            self.fprint("Lifting your axe out of your pack, you appreach the nearest tree and begin to hack it down.")
+            time.sleep(2)
+            self.fprint("After some time, you fell the tree, cutting it up into usable pieces.")
+            self.fprint("You found 8 wood!")
+            self.lose_energy()
+            self.lose_energy()
+            self.items.append("Wood")
+            self.items.append("Wood")
+            self.items.append("Wood")
+            self.items.append("Wood")
+            self.items.append("Wood")
+            self.items.append("Wood")
+            self.items.append("Wood")
+            self.items.append("Wood")
+        elif "Axe" or "Scrap Axe" in self.items and self.biome != "Forest":
+            self.fprint("You need to be in a forest in order to chop down trees.")
+        else: 
+            self.fprint("You need an axe to chop down trees.")
+            
+
 
 
 
@@ -1500,7 +1611,7 @@ class Player:
                 self.items.append("Bandage")
                 game.fprint("Using some straps of cloth, you sucessfully made a bandage.")
         else:
-             game.fprint("You do not have any cloth to make a bandage.")
+             game.fprint("You do not have the neecessary item to craft a Bandage.")
     
     def craft_cloth(self):
         if "Tarp" in self.items:
@@ -1509,14 +1620,48 @@ class Player:
             self.items.append("Bandage")
             game.fprint("Using your knife, you cut the tarp into usable cloth pieces.")
         else:
-            game.fprint("You do not have any tarp to salvage into cloth.")
+            game.fprint("You do not have the necessary item to craft Cloth.")
+
+    
+    def craft_scrap_axe(self):
+        if "Roadsign" and "Metal Pipe" and "Rope" in self.items:
+            self.items.remove("Roadsign")
+            self.items.remove("Metal Pipe")
+            self.items.remove("Rope")
+            self.items.append("Scrap Axe")
+            game.fprint("Using a piece of rope and a little bit of luck, you manage to create a handle and blade out of metal scrap to use as an axe.")
+        else:
+            game.fprint("You do not have all the necessary items to craft the Scrap Axe.")
+    
+    def craft_rope(self):
+        if "Cloth" in self.items:
+            self.items.remove("Cloth")
+            self.items.append("Rope")
+            game.fprint("Winding a long piece of rope together around itself, you create a piece of rope.")
+        else:
+            game.fprint("You do not have the necessary item to craft Rope")
+
+    def craft_makeshift_armor(self):
+        if "Ceramic" and "Rope" in self.items:
+            self.items.remove("Ceramic")
+            self.items.remove("Rope")
+            game.fprint("Using a flat piece of ceramic, you attach it to your body via rope, providing a level of regional protection. NOTE- THIS IS WIP. NOT WORKING.")
+            self.items.append("Makeshift Armor")
+        else:
+            game.fprint("You do not have the necessary items to craft Makeshift Body Armor.")
+
+
+
+
+
+
 
   ## function for drinking
     def drink(self):
         if "Water" in self.items and self.thirst < 100:
             self.items.remove("Water")
             self.thirst = 100
-            self.health += random.random(5,10)
+            self.health += random.randint(5,10)
             if self.health > 100:
                 self.health = 100
             game.fprint("You drink some warm water, quenching your thirst.")
@@ -1619,13 +1764,21 @@ class Player:
                 self.shotgun_ammo -= 1
                 game.fprint(shotgun_flavor_text)
             elif "Pistol" in self.items and self.pistol_ammo > 0:
-                pistol_flavor_text = random.randint(1,3)
+                pistol_flavor_text = random.randint(1,7)
                 if pistol_flavor_text == 1:
                         pistol_flavor_text = "You clench your pistol's grip tightly, and let off a shot!"
                 elif pistol_flavor_text == 2:
                     pistol_flavor_text = "You carefully aim down your ironsights, and pull the trigger on your pistol!"
                 elif pistol_flavor_text == 3:
                     pistol_flavor_text = "The adrenaline in your body and focused mind give you a clear sight on your target - and you shoot!"
+                elif pistol_flavor_text == 4:
+                    pistol_flavor_text = "A shot rings out from your pistol!"
+                elif pistol_flavor_text == 5:
+                    pistol_flavor_text = "A flash escapes from your barrel, sending a bullet towards your enemy!"
+                elif pistol_flavor_text == 6:
+                    pistol_flavor_text = "You line up the sight picture on your enemy, and let loose a shot!"
+                elif pistol_flavor_text == 7:
+                    pistol_flavor_text = "Your handgun, heavy in your hand, lets off a deafening shot!"
                 self.attack=random.randint(20,40)
                 self.pistol_ammo -=1
                 game.fprint(pistol_flavor_text)
@@ -1688,14 +1841,6 @@ class Player:
 
                         )
 
-
-
-
-
-
-
-
-## add a train!
 
 
 
